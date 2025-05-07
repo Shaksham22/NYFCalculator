@@ -1,0 +1,119 @@
+import SwiftUI
+
+// MARK: - Global User Data Model
+class UserData: ObservableObject {
+    @AppStorage("userName") var name: String = "" // Persist employee name
+    @AppStorage("selectedDate") private var storedDate: String = "" // Persist edited date
+    
+    // Computed property to manage date (resets to today if empty)
+    var selectedDate: Date {
+        get {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM d, yyyy"
+            return formatter.date(from: storedDate).orToday() // Defaults to today if empty
+        }
+        set {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM d, yyyy"
+            storedDate = formatter.string(from: newValue)
+        }
+    }
+}
+
+extension Optional where Wrapped == Date {
+    func orToday() -> Date { self ?? Date() } // Helper function to ensure today’s date
+}
+
+struct ContentView: View {
+    @StateObject var userData = UserData() // Shared user data
+    @State private var showDatePicker = false // Controls date picker visibility
+    @State private var isEditingName = false // Controls name editing state
+    @FocusState private var isTextFieldFocused: Bool // Ensures keyboard opens on tap
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // MARK: - Editable Name Section
+            HStack {
+                Text("Employee Name:")
+                    .font(.headline)
+
+                if isEditingName {
+                    TextField("", text: $userData.name)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(maxWidth: .infinity)
+                        .focused($isTextFieldFocused) // Enables keyboard focus
+                        .onAppear { isTextFieldFocused = true } // Automatically focus when tapped
+                        .onSubmit { isEditingName = false } // Exit when Enter is pressed
+                } else {
+                    Text(userData.name.isEmpty ? "Tap to enter name" : userData.name)
+                        .foregroundColor(userData.name.isEmpty ? .gray : .primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .onTapGesture {
+                            isEditingName = true
+                        }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 2)
+
+            // MARK: - Editable Date Section
+            HStack {
+                Text("Date:")
+                    .font(.headline)
+
+                Text(userData.selectedDate, style: .date) // Displays formatted date
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onTapGesture {
+                        showDatePicker.toggle() // Show date picker when tapped
+                    }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 2)
+
+            // MARK: - Date Picker (Closes on Selection)
+            if showDatePicker {
+                DatePicker("Select Date", selection: Binding(
+                    get: { userData.selectedDate },
+                    set: { newDate in
+                        userData.selectedDate = newDate
+                        showDatePicker = false // CLOSE CALENDAR after selection
+                    }
+                ), displayedComponents: .date)
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 5)
+            }
+
+            // MARK: - Main Tab View
+            TabView {
+                SalesContentView()
+                    .tabItem {
+                        Label("Sales Calculator", systemImage: "desktopcomputer")
+                    }
+
+                CalculatorContentView()
+                    .tabItem {
+                        Label("Safe Money Calculator", systemImage: "archivebox")
+                    }
+
+                TaxCalculatorContentView()
+                    .tabItem {
+                        Label("Tax Calculator", systemImage: "percent")
+                    }
+            }
+        }
+        .environmentObject(userData) // Make userData available to all views
+        .onTapGesture {
+            dismissKeyboardAndPicker() // Close everything when tapping outside
+        }
+    }
+
+    // MARK: - Close Keyboard & Picker on Tap
+    private func dismissKeyboardAndPicker() {
+        isTextFieldFocused = false
+        isEditingName = false
+        showDatePicker = false
+    }
+}
