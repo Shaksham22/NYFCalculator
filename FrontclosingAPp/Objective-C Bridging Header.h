@@ -1,12 +1,9 @@
-//
-//  Objective-C Bridging Header.h
-//  FrontclosingAPp
-//
-//  Created by Shaksham Shubham on 2025-03-02.
-//
+#import <StarIO/SMPortSwift.h>
 
-#ifndef Objective_C_Bridging_Header_h
-#define Objective_C_Bridging_Header_h
+#import <StarIO_Extension/StarIoExt.h>
+#import <StarIO_Extension/StarIoExtManager.h>
+#import <StarIO_Extension/SMBluetoothManagerFactory.h>
+#import <StarIO_Extension/SMSoundSetting.h>
 
-
-#endif /* Objective_C_Bridging_Header_h */
+// To use StarIODeviceSetting.xcframework, you also need to write the following lines.
+#import <StarIODeviceSetting/StarIODeviceSetting.h>

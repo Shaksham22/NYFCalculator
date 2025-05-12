@@ -13,8 +13,19 @@
 		E916C9D92C1C322800875433 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E916C9D82C1C322800875433 /* Assets.xcassets */; };
 		E916C9DC2C1C322800875433 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E916C9DB2C1C322800875433 /* Preview Assets.xcassets */; };
 		E916C9E62C1C322800875433 /* FrontclosingAPpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9E52C1C322800875433 /* FrontclosingAPpTests.swift */; };
-		E916C9F02C1C322800875433 /* FrontclosingAPpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9EF2C1C322800875433 /* FrontclosingAPpUITests.swift */; };
-		E916C9F22C1C322800875433 /* FrontclosingAPpUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9F12C1C322800875433 /* FrontclosingAPpUITestsLaunchTests.swift */; };
+		E9246C6F2CA60CDE00E80043 /* TaxCalculatorContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9246C6E2CA60CDE00E80043 /* TaxCalculatorContentView.swift */; };
+		E93D07FF2C2C37650023ABFC /* SalesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93D07FE2C2C37650023ABFC /* SalesContentView.swift */; };
+		E93D08012C2C37940023ABFC /* CalculatorContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93D08002C2C37940023ABFC /* CalculatorContentView.swift */; };
+		E96284372DCF56BD00431751 /* ReceiptGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96284362DCF56BD00431751 /* ReceiptGenerator.swift */; };
+		E96F240A2DC88012003FE15C /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9C28E822D742E8500B0A289 /* CoreBluetooth.framework */; };
+		E96F240C2DC88014003FE15C /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9C28E842D742E8E00B0A289 /* ExternalAccessory.framework */; };
+		E96F240F2DC88B5C003FE15C /* File.txt in Resources */ = {isa = PBXBuildFile; fileRef = E96F240E2DC88B5C003FE15C /* File.txt */; };
+		E977C8FF2CD5783000A46790 /* DenominationTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E977C8FE2CD5783000A46790 /* DenominationTableView.swift */; };
+		E9797C882DCE125B006CEB70 /* StarIO10 in Frameworks */ = {isa = PBXBuildFile; productRef = E9797C872DCE125B006CEB70 /* StarIO10 */; };
+		E97C207E2D743C28005FDB0E /* Objectivecheader.h in Sources */ = {isa = PBXBuildFile; fileRef = E97C207D2D7435C5005FDB0E /* Objectivecheader.h */; };
+		E97C20812D7442D9005FDB0E /* StarPrinterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97C20802D7442D9005FDB0E /* StarPrinterManager.swift */; };
+		E99B90E42C33F0A000465084 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E99B90E32C33F0A000465084 /* Launch Screen.storyboard */; };
+		E9C28E732D7404BE00B0A289 /* Contentviewsample.txt in Sources */ = {isa = PBXBuildFile; fileRef = E9C28E722D7404BE00B0A289 /* Contentviewsample.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +45,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		E9C28E7D2D742E3300B0A289 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		E916C9CF2C1C322600875433 /* FrontclosingAPp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontclosingAPp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E916C9D22C1C322600875433 /* FrontclosingAPpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPpApp.swift; sourceTree = "<group>"; };
@@ -44,8 +68,19 @@
 		E916C9E12C1C322800875433 /* FrontclosingAPpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrontclosingAPpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E916C9E52C1C322800875433 /* FrontclosingAPpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPpTests.swift; sourceTree = "<group>"; };
 		E916C9EB2C1C322800875433 /* FrontclosingAPpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrontclosingAPpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E916C9EF2C1C322800875433 /* FrontclosingAPpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPpUITests.swift; sourceTree = "<group>"; };
-		E916C9F12C1C322800875433 /* FrontclosingAPpUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPpUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E9246C6E2CA60CDE00E80043 /* TaxCalculatorContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxCalculatorContentView.swift; sourceTree = "<group>"; };
+		E93D07FE2C2C37650023ABFC /* SalesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesContentView.swift; sourceTree = "<group>"; };
+		E93D08002C2C37940023ABFC /* CalculatorContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorContentView.swift; sourceTree = "<group>"; };
+		E96284362DCF56BD00431751 /* ReceiptGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptGenerator.swift; sourceTree = "<group>"; };
+		E96F240E2DC88B5C003FE15C /* File.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = File.txt; sourceTree = "<group>"; };
+		E977C8FE2CD5783000A46790 /* DenominationTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenominationTableView.swift; sourceTree = "<group>"; };
+		E97C207D2D7435C5005FDB0E /* Objectivecheader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Objectivecheader.h; sourceTree = "<group>"; };
+		E97C20802D7442D9005FDB0E /* StarPrinterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPrinterManager.swift; sourceTree = "<group>"; };
+		E99B90E32C33F0A000465084 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		E99B90E52C33F52700465084 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E9C28E722D7404BE00B0A289 /* Contentviewsample.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Contentviewsample.txt; sourceTree = "<group>"; };
+		E9C28E822D742E8500B0A289 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		E9C28E842D742E8E00B0A289 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +88,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9797C882DCE125B006CEB70 /* StarIO10 in Frameworks */,
+				E96F240C2DC88014003FE15C /* ExternalAccessory.framework in Frameworks */,
+				E96F240A2DC88012003FE15C /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +118,7 @@
 				E916C9E42C1C322800875433 /* FrontclosingAPpTests */,
 				E916C9EE2C1C322800875433 /* FrontclosingAPpUITests */,
 				E916C9D02C1C322600875433 /* Products */,
+				E9C28E742D742D7900B0A289 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -96,10 +135,21 @@
 		E916C9D12C1C322600875433 /* FrontclosingAPp */ = {
 			isa = PBXGroup;
 			children = (
+				E99B90E52C33F52700465084 /* Info.plist */,
+				E97C207D2D7435C5005FDB0E /* Objectivecheader.h */,
 				E916C9D22C1C322600875433 /* FrontclosingAPpApp.swift */,
 				E916C9D42C1C322600875433 /* ContentView.swift */,
+				E9C28E722D7404BE00B0A289 /* Contentviewsample.txt */,
+				E93D07FE2C2C37650023ABFC /* SalesContentView.swift */,
+				E93D08002C2C37940023ABFC /* CalculatorContentView.swift */,
+				E9246C6E2CA60CDE00E80043 /* TaxCalculatorContentView.swift */,
+				E977C8FE2CD5783000A46790 /* DenominationTableView.swift */,
 				E916C9D62C1C322600875433 /* Item.swift */,
+				E97C20802D7442D9005FDB0E /* StarPrinterManager.swift */,
+				E96284362DCF56BD00431751 /* ReceiptGenerator.swift */,
+				E96F240E2DC88B5C003FE15C /* File.txt */,
 				E916C9D82C1C322800875433 /* Assets.xcassets */,
+				E99B90E32C33F0A000465084 /* Launch Screen.storyboard */,
 				E916C9DA2C1C322800875433 /* Preview Content */,
 			);
 			path = FrontclosingAPp;
@@ -124,28 +174,50 @@
 		E916C9EE2C1C322800875433 /* FrontclosingAPpUITests */ = {
 			isa = PBXGroup;
 			children = (
-				E916C9EF2C1C322800875433 /* FrontclosingAPpUITests.swift */,
-				E916C9F12C1C322800875433 /* FrontclosingAPpUITestsLaunchTests.swift */,
 			);
 			path = FrontclosingAPpUITests;
 			sourceTree = "<group>";
 		};
+		E9C28E742D742D7900B0A289 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E9C28E842D742E8E00B0A289 /* ExternalAccessory.framework */,
+				E9C28E822D742E8500B0A289 /* CoreBluetooth.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E97C207F2D743C6C005FDB0E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		E916C9CE2C1C322600875433 /* FrontclosingAPp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E916C9F52C1C322800875433 /* Build configuration list for PBXNativeTarget "FrontclosingAPp" */;
 			buildPhases = (
+				E97C207F2D743C6C005FDB0E /* Headers */,
 				E916C9CB2C1C322600875433 /* Sources */,
 				E916C9CC2C1C322600875433 /* Frameworks */,
 				E916C9CD2C1C322600875433 /* Resources */,
+				E9C28E7D2D742E3300B0A289 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = FrontclosingAPp;
+			packageProductDependencies = (
+				E9797C872DCE125B006CEB70 /* StarIO10 */,
+			);
 			productName = FrontclosingAPp;
 			productReference = E916C9CF2C1C322600875433 /* FrontclosingAPp.app */;
 			productType = "com.apple.product-type.application";
@@ -216,8 +288,12 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = E916C9C62C1C322600875433;
+			packageReferences = (
+				E9797C862DCE125B006CEB70 /* XCRemoteSwiftPackageReference "StarXpand-SDK-iOS" */,
+			);
 			productRefGroup = E916C9D02C1C322600875433 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -234,7 +310,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E99B90E42C33F0A000465084 /* Launch Screen.storyboard in Resources */,
 				E916C9DC2C1C322800875433 /* Preview Assets.xcassets in Resources */,
+				E96F240F2DC88B5C003FE15C /* File.txt in Resources */,
 				E916C9D92C1C322800875433 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,9 +338,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E97C207E2D743C28005FDB0E /* Objectivecheader.h in Sources */,
 				E916C9D52C1C322600875433 /* ContentView.swift in Sources */,
+				E96284372DCF56BD00431751 /* ReceiptGenerator.swift in Sources */,
+				E93D08012C2C37940023ABFC /* CalculatorContentView.swift in Sources */,
+				E9C28E732D7404BE00B0A289 /* Contentviewsample.txt in Sources */,
 				E916C9D72C1C322600875433 /* Item.swift in Sources */,
 				E916C9D32C1C322600875433 /* FrontclosingAPpApp.swift in Sources */,
+				E97C20812D7442D9005FDB0E /* StarPrinterManager.swift in Sources */,
+				E93D07FF2C2C37650023ABFC /* SalesContentView.swift in Sources */,
+				E977C8FF2CD5783000A46790 /* DenominationTableView.swift in Sources */,
+				E9246C6F2CA60CDE00E80043 /* TaxCalculatorContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,8 +364,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E916C9F22C1C322800875433 /* FrontclosingAPpUITestsLaunchTests.swift in Sources */,
-				E916C9F02C1C322800875433 /* FrontclosingAPpUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,13 +510,18 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FrontclosingAPp/Preview Content\"";
+				DEVELOPMENT_TEAM = YP6YG639M2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "\"/Users/shakshamshubham/Desktop/Masters made Project/FrontclosingAPp/FrontclosingAPp/\"";
+				INFOPLIST_FILE = FrontclosingAPp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "NYF Till Calculator";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -441,6 +530,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Samapp.Frontclosing.FrontclosingAPp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/FrontclosingAPp/Objectivecheader.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -454,13 +544,18 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FrontclosingAPp/Preview Content\"";
+				DEVELOPMENT_TEAM = YP6YG639M2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "\"/Users/shakshamshubham/Desktop/Masters made Project/FrontclosingAPp/FrontclosingAPp/\"";
+				INFOPLIST_FILE = FrontclosingAPp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "NYF Till Calculator";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -469,6 +564,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Samapp.Frontclosing.FrontclosingAPp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/FrontclosingAPp/Objectivecheader.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -586,6 +682,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E9797C862DCE125B006CEB70 /* XCRemoteSwiftPackageReference "StarXpand-SDK-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/star-micronics/StarXpand-SDK-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E9797C872DCE125B006CEB70 /* StarIO10 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9797C862DCE125B006CEB70 /* XCRemoteSwiftPackageReference "StarXpand-SDK-iOS" */;
+			productName = StarIO10;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E916C9C72C1C322600875433 /* Project object */;
 }

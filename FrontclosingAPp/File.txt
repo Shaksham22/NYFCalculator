@@ -1,0 +1,269 @@
+import Foundation
+import UIKit  // Needed for rendering text to image
+import StarIO
+import StarIO_Extension
+
+class StarPrinterManager {
+    
+    static func printReceipt(
+        employeeName: String,
+        currentDate: String,
+        denominationData: [(Double, Int)],
+        emulation: StarIoExtEmulation,
+        completion: @escaping (String) -> Void
+    ) {
+        do {
+            // 1. Discover printer
+            guard let results = try SMPort.searchPrinter(target: "BT:") as? [PortInfo],
+                  let printer = results.first,
+                  let portName = printer.portName else {
+                completion("No Star printer found.")
+                return
+            }
+
+            // Printer info header
+            let mac   = printer.macAddress ?? "Unknown MAC"
+            let model = printer.modelName   ?? "Unknown Model"
+            let header = """
+            Using printer:
+            • Port:  \(portName)
+            • MAC:   \(mac)
+            • Model: \(model)
+
+            """
+
+            // 2. Command builder
+            guard let builder = StarIoExt.createCommandBuilder(emulation) else {
+                completion(header + "Failed to create command builder.")
+                return
+            }
+
+            builder.beginDocument()
+
+            // 3. Prepare content text
+            var content = ""
+            content += "Cash Summary\n"
+            content += "\(currentDate)\n"
+            content += "Employee: \(employeeName)\n\n"
+            
+            var total: Double = 0
+            for (denom, count) in denominationData {
+                let line = String(format: "$%.0f x %d = $%.2f\n", denom, count, denom * Double(count))
+                content += line
+                total += denom * Double(count)
+            }
+            content += "-------------------------\n"
+            content += String(format: "Total     = $%.2f\n", total)
+
+            // 4. Render text to image
+            if let image = renderTextToImage(text: content) {
+                builder.appendBitmap(image, diffusion: true)
+            } else {
+                completion(header + "Failed to render text to image.")
+                return
+            }
+
+            builder.appendCutPaper(.partialCutWithFeed)
+            builder.endDocument()
+
+            guard let commands = builder.commands.copy() as? Data else {
+                completion(header + "Failed to build print data.")
+                return
+            }
+
+            // 5. Connect and write
+            let port = try SMPort.getPort(portName: portName, portSettings: "", ioTimeoutMillis: 10000)
+            defer { SMPort.release(port) }
+
+            var bytesWritten: UInt32 = 0
+            try commands.withUnsafeBytes { buffer in
+                guard let p = buffer.baseAddress?.assumingMemoryBound(to: UInt8.self) else {
+                    throw NSError(domain: "StarPrinter", code: -1, userInfo: [NSLocalizedDescriptionKey: "Bad buffer"])
+                }
+                try port.write(writeBuffer: p, offset: 0, size: UInt32(commands.count), numberOfBytesWritten: &bytesWritten)
+            }
+
+            if bytesWritten == UInt32(commands.count) {
+                completion(header + "Printed successfully.")
+            } else {
+                completion(header + "Partial print: \(bytesWritten)/\(commands.count) bytes written.")
+            }
+
+        } catch {
+            completion("❌ Print error: \(error.localizedDescription)")
+        }
+    }
+
+    /// Helper to render multiline text into UIImage for starGraphic emulation
+    private static func renderTextToImage(text: String) -> UIImage? {
+        let font = UIFont.monospacedSystemFont(ofSize: 22, weight: .regular)
+        let attributes: [NSAttributedString.Key: Any] = [.font: font]
+        let textSize = (text as NSString).boundingRect(with: CGSize(width: 576, height: .infinity),
+                                                       options: [.usesLineFragmentOrigin],
+                                                       attributes: attributes,
+                                                       context: nil).size
+
+        UIGraphicsBeginImageContextWithOptions(textSize, false, 0.0)
+        (text as NSString).draw(in: CGRect(origin: .zero, size: textSize), withAttributes: attributes)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+}
+
+
+
+
+
+
+
+import SwiftUI
+
+struct DenominationTableView: View {
+    // MARK: - Alert & Emulation State
+    @State private var alertMessage = ""
+    @State private var showingAlert = false
+    @State private var showingEmulationSelector = false
+    
+    // MARK: - Properties
+    let individualDenominationCounts: [Double: Int]
+    let bundleDenominationCounts: [Double: Int]
+    var sectionTitle: String? = nil
+
+    // MARK: - Helpers
+    private var sortedDenominations: [Double] {
+        Array(Set(individualDenominationCounts.keys).union(bundleDenominationCounts.keys))
+            .sorted(by: >)
+    }
+    
+    private func bundleMultiplier(for denom: Double) -> Double {
+        switch denom {
+        case 1.00: return 25
+        case 0.25: return 10
+        case 0.10: return 5
+        case 0.05: return 2
+        default:     return 0
+        }
+    }
+    
+    private var displayedTitle: String {
+        sectionTitle ?? "Denomination Summary"
+    }
+    
+    private func getCurrentDate() -> String {
+        let fmt = DateFormatter()
+        fmt.dateFormat = "MMMM d, yyyy"
+        return fmt.string(from: Date())
+    }
+    
+    /// Called after the user picks an emulation
+    private func performPrint(as emulation: StarIoExtEmulation) {
+        let employeeName = "Admin"
+        let currentDate = getCurrentDate()
+        
+        // build data array
+        var data: [(Double,Int)] = []
+        for denom in sortedDenominations {
+            if let cnt = individualDenominationCounts[denom], cnt > 0 {
+                data.append((denom, cnt))
+            }
+            if let bcnt = bundleDenominationCounts[denom], bcnt > 0 {
+                data.append((denom, Int(bundleMultiplier(for: denom)) * bcnt))
+            }
+        }
+        
+        StarPrinterManager.printReceipt(
+            employeeName: employeeName,
+            currentDate: currentDate,
+            denominationData: data,
+            emulation: emulation
+        ) { result in
+            alertMessage = result
+            showingAlert = true
+        }
+    }
+
+    // MARK: - Body
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Title
+            Text(displayedTitle)
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.bottom, 5)
+            
+            // Rows
+            ForEach(sortedDenominations, id: \.self) { denom in
+                if let cnt = individualDenominationCounts[denom], cnt > 0 {
+                    HStack {
+                        Text(String(format: "%.2f $", denom))
+                            .frame(width: 90, alignment: .leading)
+                        Text("x").frame(width: 20)
+                        Text("\(cnt)").frame(width: 40)
+                        Text("=").frame(width: 10)
+                        Text(String(format: "%.2f", denom * Double(cnt)))
+                            .frame(width: 80, alignment: .trailing)
+                    }
+                }
+                if let bcnt = bundleDenominationCounts[denom], bcnt > 0 {
+                    HStack {
+                        Text(String(format: "%.2f $", denom))
+                            .frame(width: 90, alignment: .leading)
+                        Text("x").frame(width: 20)
+                        Text("(\(bcnt))").frame(width: 40)
+                        Text("=").frame(width: 10)
+                        Text(String(format: "%.2f", bundleMultiplier(for: denom) * Double(bcnt)))
+                            .frame(width: 80, alignment: .trailing)
+                    }
+                }
+            }
+            
+            Divider().padding(.vertical, 5)
+            
+            // Total
+            HStack {
+                Text("Total:").bold()
+                Spacer()
+                Text(String(format: "%.2f", sortedDenominations.reduce(0) {
+                    let indiv = Double(individualDenominationCounts[$1] ?? 0) * $1
+                    let bund  = Double(bundleDenominationCounts[$1] ?? 0) * bundleMultiplier(for: $1)
+                    return $0 + indiv + bund
+                })).bold()
+            }
+            
+            // Print Button
+            Button("Print") {
+                showingEmulationSelector = true
+            }
+            .font(.headline)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.blue)
+            .cornerRadius(10)
+            .padding(.top, 10)
+        }
+        .padding()
+        // 1️⃣ Printer status alert
+        .alert(isPresented: $showingAlert) {
+            Alert(
+                title: Text("Printer Status"),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+        // 2️⃣ Emulation picker popup
+        .confirmationDialog(
+            "Select Emulation Mode",
+            isPresented: $showingEmulationSelector,
+            titleVisibility: .visible
+        ) {
+            Button("StarGraphic")    { performPrint(as: .starGraphic) }
+            Button("StarLine")       { performPrint(as: .starLine) }
+            Button("StarPRNT")       { performPrint(as: .starPRNT) }
+            Button("ESC/POS")        { performPrint(as: .escPos) }
+            Button("ESC/POS Mobile") { performPrint(as: .escPosMobile) }
+            Button("Cancel", role: .cancel) { }
+        }
+    }
+}

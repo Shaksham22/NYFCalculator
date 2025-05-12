@@ -1,61 +1,64 @@
-//
-//  ContentView.swift
-//  FrontclosingAPp
-//
-//  Created by Shaksham Shubham on 2024-06-14.
-//
-
 import SwiftUI
-import SwiftData
 
-struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
-    var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
+// MARK: - Global User Data Model
+class UserData: ObservableObject {
+    @AppStorage("userName") var name: String = "" // Persist name across app sessions
+    @Published var currentDate: String = UserData.getFormattedDate() // Store today's date
+    
+    static func getFormattedDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy" // Format: Month Date, Year
+        return formatter.string(from: Date()) // Get current date
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+struct ContentView: View {
+    @StateObject var userData = UserData() // Shared data for all views
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            // MARK: - Name Input Section
+            HStack {
+                Text("Employee Name")
+                    .font(.headline)
+
+                TextField("", text: $userData.name)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
+            .padding(.vertical, 2)
+
+            // MARK: - Date Display
+            Text("\(userData.currentDate)")
+                .font(.headline)
+                .foregroundColor(.gray)
+                .padding(.horizontal)
+
+            // MARK: - Main Tab View
+            TabView {
+                SalesContentView()
+                    .tabItem {
+                        Label("Sales Calculator", systemImage: "desktopcomputer")
+                    }
+
+                CalculatorContentView()
+                    .tabItem {
+                        Label("Safe Money Calculator", systemImage: "archivebox")
+                    }
+
+                TaxCalculatorContentView()
+                    .tabItem {
+                        Label("Tax Calculator", systemImage: "percent")
+                    }
+            }
+        }
+        .environmentObject(userData) // Pass shared data to all views
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
