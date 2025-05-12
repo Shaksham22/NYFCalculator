@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E916C9D32C1C322600875433 /* FrontclosingAPpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D22C1C322600875433 /* FrontclosingAPpApp.swift */; };
+		E916C9D32C1C322600875433 /* FrontclosingAPp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D22C1C322600875433 /* FrontclosingAPp.swift */; };
 		E916C9D52C1C322600875433 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D42C1C322600875433 /* ContentView.swift */; };
 		E916C9D72C1C322600875433 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D62C1C322600875433 /* Item.swift */; };
 		E916C9D92C1C322800875433 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E916C9D82C1C322800875433 /* Assets.xcassets */; };
@@ -59,15 +59,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E916C9CF2C1C322600875433 /* NYF Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NYF Calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E916C9D22C1C322600875433 /* FrontclosingAPpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPpApp.swift; sourceTree = "<group>"; };
+		E916C9CF2C1C322600875433 /* FrontclosingAPp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontclosingAPp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E916C9D22C1C322600875433 /* FrontclosingAPp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPp.swift; sourceTree = "<group>"; };
 		E916C9D42C1C322600875433 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E916C9D62C1C322600875433 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		E916C9D82C1C322800875433 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E916C9DB2C1C322800875433 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E916C9E12C1C322800875433 /* NYF CalculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NYF CalculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E916C9E12C1C322800875433 /* FrontclosingAPpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrontclosingAPpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E916C9E52C1C322800875433 /* FrontclosingAPpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPpTests.swift; sourceTree = "<group>"; };
-		E916C9EB2C1C322800875433 /* NYF CalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NYF CalculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E916C9EB2C1C322800875433 /* FrontclosingAPpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrontclosingAPpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9246C6E2CA60CDE00E80043 /* TaxCalculatorContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxCalculatorContentView.swift; sourceTree = "<group>"; };
 		E93D07FE2C2C37650023ABFC /* SalesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesContentView.swift; sourceTree = "<group>"; };
 		E93D08002C2C37940023ABFC /* CalculatorContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorContentView.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		E916C9C62C1C322600875433 = {
 			isa = PBXGroup;
 			children = (
-				E916C9D12C1C322600875433 /* NYF Calculator */,
+				E916C9D12C1C322600875433 /* FrontclosingAPp */,
 				E916C9E42C1C322800875433 /* FrontclosingAPpTests */,
 				E916C9EE2C1C322800875433 /* FrontclosingAPpUITests */,
 				E916C9D02C1C322600875433 /* Products */,
@@ -125,19 +125,19 @@
 		E916C9D02C1C322600875433 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E916C9CF2C1C322600875433 /* NYF Calculator.app */,
-				E916C9E12C1C322800875433 /* NYF CalculatorTests.xctest */,
-				E916C9EB2C1C322800875433 /* NYF CalculatorUITests.xctest */,
+				E916C9CF2C1C322600875433 /* FrontclosingAPp.app */,
+				E916C9E12C1C322800875433 /* FrontclosingAPpTests.xctest */,
+				E916C9EB2C1C322800875433 /* FrontclosingAPpUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E916C9D12C1C322600875433 /* NYF Calculator */ = {
+		E916C9D12C1C322600875433 /* FrontclosingAPp */ = {
 			isa = PBXGroup;
 			children = (
 				E99B90E52C33F52700465084 /* Info.plist */,
 				E97C207D2D7435C5005FDB0E /* Objectivecheader.h */,
-				E916C9D22C1C322600875433 /* FrontclosingAPpApp.swift */,
+				E916C9D22C1C322600875433 /* FrontclosingAPp.swift */,
 				E916C9D42C1C322600875433 /* ContentView.swift */,
 				E9C28E722D7404BE00B0A289 /* Contentviewsample.txt */,
 				E93D07FE2C2C37650023ABFC /* SalesContentView.swift */,
@@ -152,8 +152,9 @@
 				E99B90E32C33F0A000465084 /* Launch Screen.storyboard */,
 				E916C9DA2C1C322800875433 /* Preview Content */,
 			);
-			path = "NYF Calculator";
-			sourceTree = SOURCE_ROOT;
+			name = FrontclosingAPp;
+			path = "/Users/shakshamshubham/Desktop/Masters made Project/FrontclosingAPp/FrontclosingAPp";
+			sourceTree = "<absolute>";
 		};
 		E916C9DA2C1C322800875433 /* Preview Content */ = {
 			isa = PBXGroup;
@@ -200,9 +201,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		E916C9CE2C1C322600875433 /* NYF Calculator */ = {
+		E916C9CE2C1C322600875433 /* FrontclosingAPp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E916C9F52C1C322800875433 /* Build configuration list for PBXNativeTarget "NYF Calculator" */;
+			buildConfigurationList = E916C9F52C1C322800875433 /* Build configuration list for PBXNativeTarget "FrontclosingAPp" */;
 			buildPhases = (
 				E97C207F2D743C6C005FDB0E /* Headers */,
 				E916C9CB2C1C322600875433 /* Sources */,
@@ -214,17 +215,17 @@
 			);
 			dependencies = (
 			);
-			name = "NYF Calculator";
+			name = FrontclosingAPp;
 			packageProductDependencies = (
 				E9797C872DCE125B006CEB70 /* StarIO10 */,
 			);
 			productName = FrontclosingAPp;
-			productReference = E916C9CF2C1C322600875433 /* NYF Calculator.app */;
+			productReference = E916C9CF2C1C322600875433 /* FrontclosingAPp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E916C9E02C1C322800875433 /* NYF CalculatorTests */ = {
+		E916C9E02C1C322800875433 /* FrontclosingAPpTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E916C9F82C1C322800875433 /* Build configuration list for PBXNativeTarget "NYF CalculatorTests" */;
+			buildConfigurationList = E916C9F82C1C322800875433 /* Build configuration list for PBXNativeTarget "FrontclosingAPpTests" */;
 			buildPhases = (
 				E916C9DD2C1C322800875433 /* Sources */,
 				E916C9DE2C1C322800875433 /* Frameworks */,
@@ -235,14 +236,14 @@
 			dependencies = (
 				E916C9E32C1C322800875433 /* PBXTargetDependency */,
 			);
-			name = "NYF CalculatorTests";
+			name = FrontclosingAPpTests;
 			productName = FrontclosingAPpTests;
-			productReference = E916C9E12C1C322800875433 /* NYF CalculatorTests.xctest */;
+			productReference = E916C9E12C1C322800875433 /* FrontclosingAPpTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E916C9EA2C1C322800875433 /* NYF CalculatorUITests */ = {
+		E916C9EA2C1C322800875433 /* FrontclosingAPpUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E916C9FB2C1C322800875433 /* Build configuration list for PBXNativeTarget "NYF CalculatorUITests" */;
+			buildConfigurationList = E916C9FB2C1C322800875433 /* Build configuration list for PBXNativeTarget "FrontclosingAPpUITests" */;
 			buildPhases = (
 				E916C9E72C1C322800875433 /* Sources */,
 				E916C9E82C1C322800875433 /* Frameworks */,
@@ -253,9 +254,9 @@
 			dependencies = (
 				E916C9ED2C1C322800875433 /* PBXTargetDependency */,
 			);
-			name = "NYF CalculatorUITests";
+			name = FrontclosingAPpUITests;
 			productName = FrontclosingAPpUITests;
-			productReference = E916C9EB2C1C322800875433 /* NYF CalculatorUITests.xctest */;
+			productReference = E916C9EB2C1C322800875433 /* FrontclosingAPpUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -281,7 +282,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "FrontclosingAPp" */;
+			buildConfigurationList = E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "NYF Calculator" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -298,9 +299,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E916C9CE2C1C322600875433 /* NYF Calculator */,
-				E916C9E02C1C322800875433 /* NYF CalculatorTests */,
-				E916C9EA2C1C322800875433 /* NYF CalculatorUITests */,
+				E916C9CE2C1C322600875433 /* FrontclosingAPp */,
+				E916C9E02C1C322800875433 /* FrontclosingAPpTests */,
+				E916C9EA2C1C322800875433 /* FrontclosingAPpUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -344,7 +345,7 @@
 				E93D08012C2C37940023ABFC /* CalculatorContentView.swift in Sources */,
 				E9C28E732D7404BE00B0A289 /* Contentviewsample.txt in Sources */,
 				E916C9D72C1C322600875433 /* Item.swift in Sources */,
-				E916C9D32C1C322600875433 /* FrontclosingAPpApp.swift in Sources */,
+				E916C9D32C1C322600875433 /* FrontclosingAPp.swift in Sources */,
 				E97C20812D7442D9005FDB0E /* StarPrinterManager.swift in Sources */,
 				E93D07FF2C2C37650023ABFC /* SalesContentView.swift in Sources */,
 				E977C8FF2CD5783000A46790 /* DenominationTableView.swift in Sources */,
@@ -372,12 +373,12 @@
 /* Begin PBXTargetDependency section */
 		E916C9E32C1C322800875433 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E916C9CE2C1C322600875433 /* NYF Calculator */;
+			target = E916C9CE2C1C322600875433 /* FrontclosingAPp */;
 			targetProxy = E916C9E22C1C322800875433 /* PBXContainerItemProxy */;
 		};
 		E916C9ED2C1C322800875433 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E916C9CE2C1C322600875433 /* NYF Calculator */;
+			target = E916C9CE2C1C322600875433 /* FrontclosingAPp */;
 			targetProxy = E916C9EC2C1C322800875433 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -585,7 +586,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NYF Calculator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NYF Calculator";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FrontclosingAPp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FrontclosingAPp";
 			};
 			name = Debug;
 		};
@@ -604,7 +605,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NYF Calculator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NYF Calculator";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FrontclosingAPp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FrontclosingAPp";
 			};
 			name = Release;
 		};
@@ -645,7 +646,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "FrontclosingAPp" */ = {
+		E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "NYF Calculator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E916C9F32C1C322800875433 /* Debug */,
@@ -654,7 +655,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E916C9F52C1C322800875433 /* Build configuration list for PBXNativeTarget "NYF Calculator" */ = {
+		E916C9F52C1C322800875433 /* Build configuration list for PBXNativeTarget "FrontclosingAPp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E916C9F62C1C322800875433 /* Debug */,
@@ -663,7 +664,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E916C9F82C1C322800875433 /* Build configuration list for PBXNativeTarget "NYF CalculatorTests" */ = {
+		E916C9F82C1C322800875433 /* Build configuration list for PBXNativeTarget "FrontclosingAPpTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E916C9F92C1C322800875433 /* Debug */,
@@ -672,7 +673,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E916C9FB2C1C322800875433 /* Build configuration list for PBXNativeTarget "NYF CalculatorUITests" */ = {
+		E916C9FB2C1C322800875433 /* Build configuration list for PBXNativeTarget "FrontclosingAPpUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E916C9FC2C1C322800875433 /* Debug */,
