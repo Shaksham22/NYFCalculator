@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E916C9CE2C1C322600875433"
-               BuildableName = "FrontclosingAPp.app"
-               BlueprintName = "FrontclosingAPp"
+               BuildableName = "NYF Calculator.app"
+               BlueprintName = "NYF Calculator"
                ReferencedContainer = "container:FrontclosingAPp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -36,8 +36,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E916C9E02C1C322800875433"
-               BuildableName = "FrontclosingAPpTests.xctest"
-               BlueprintName = "FrontclosingAPpTests"
+               BuildableName = "NYF CalculatorTests.xctest"
+               BlueprintName = "NYF CalculatorTests"
                ReferencedContainer = "container:FrontclosingAPp.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -47,8 +47,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E916C9EA2C1C322800875433"
-               BuildableName = "FrontclosingAPpUITests.xctest"
-               BlueprintName = "FrontclosingAPpUITests"
+               BuildableName = "NYF CalculatorUITests.xctest"
+               BlueprintName = "NYF CalculatorUITests"
                ReferencedContainer = "container:FrontclosingAPp.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -69,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E916C9CE2C1C322600875433"
-            BuildableName = "FrontclosingAPp.app"
-            BlueprintName = "FrontclosingAPp"
+            BuildableName = "NYF Calculator.app"
+            BlueprintName = "NYF Calculator"
             ReferencedContainer = "container:FrontclosingAPp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -93,8 +93,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E916C9CE2C1C322600875433"
-            BuildableName = "FrontclosingAPp.app"
-            BlueprintName = "FrontclosingAPp"
+            BuildableName = "NYF Calculator.app"
+            BlueprintName = "NYF Calculator"
             ReferencedContainer = "container:FrontclosingAPp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
