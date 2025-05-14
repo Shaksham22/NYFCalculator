@@ -13,6 +13,7 @@ struct StarPrinterManager {
     static func printReceipt(
         employeeName: String,
         currentDate: String,
+        tableTitle: String,
         individualDenominationCounts: [Double: Int],
         bundleDenominationCounts: [Double: Int],
         completion: @escaping (String) -> Void
@@ -20,6 +21,7 @@ struct StarPrinterManager {
         let image = ReceiptGenerator.generateReceiptImage(
             employeeName: employeeName,
             currentDate: currentDate,
+            tableTitle: tableTitle,
             individualDenominationCounts: individualDenominationCounts,
             bundleDenominationCounts: bundleDenominationCounts
         )

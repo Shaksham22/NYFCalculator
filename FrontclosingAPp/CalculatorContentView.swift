@@ -166,7 +166,7 @@ struct CalculatorContentView: View {
                         DenominationTableView(
                             individualDenominationCounts: denominationcount.mapValues { Int($0) ?? 0 },
                             bundleDenominationCounts: denominationsbundle.mapValues { Int($0) ?? 0 },
-                            sectionTitle: tableName
+                            tableTitle: tableName
                         )
 
                         Button(action: {

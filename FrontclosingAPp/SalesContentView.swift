@@ -74,14 +74,14 @@ struct SalesContentView: View {
                     DenominationTableView(
                         individualDenominationCounts: allocatedX,
                         bundleDenominationCounts: [:], // or pass the actual bundle dictionary if available
-                        sectionTitle: "Bank Deposit Money"
+                        tableTitle: "Bank Deposit Money"
                     )
 
                     // Remaining Denominations for Till
                     DenominationTableView(
                         individualDenominationCounts: remainingDenominations,
                         bundleDenominationCounts: [:], // or pass the actual bundle dictionary if available
-                        sectionTitle: "Till Money"
+                        tableTitle: "Till Money"
                     )
                 }
                 // MARK: - Message Display

@@ -282,7 +282,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "NYF Calculator" */;
+			buildConfigurationList = E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "FrontclosingAPp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -646,7 +646,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "NYF Calculator" */ = {
+		E916C9CA2C1C322600875433 /* Build configuration list for PBXProject "FrontclosingAPp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E916C9F32C1C322800875433 /* Debug */,
