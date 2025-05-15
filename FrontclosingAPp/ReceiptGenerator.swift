@@ -2,146 +2,190 @@ import Foundation
 import UIKit
 import SwiftUI
 import StarIO10
-
 struct ReceiptGenerator {
+  /// Renders a receipt‐style breakdown of denominations into a UIImage,
+  /// with a centered, larger title at top and a footer showing employee & date.
   static func generateReceiptImage(
     employeeName: String,
     currentDate: String,
     tableTitle: String?,
     individualDenominationCounts: [Double: Int],
     bundleDenominationCounts: [Double: Int],
-    width: CGFloat = 406
+    width: CGFloat = 900               // adjust to fit your UI
   ) -> UIImage {
+    // 1) Data setup
+    let denominations = ["100.00","50.00","20.00","10.00","5.00","2.00","1.00","0.25","0.10","0.05"]
+    let bundleDenoms  = ["1.00","0.25","0.10","0.05"]
+    let bundleValues: [Double: Double] = [1.00:25, 0.25:10, 0.10:5, 0.05:2]
 
-    let margin: CGFloat = 10
+    // 2) Build the “body” lines (denominations + total)
+    var receiptLines = [String]()
+    let space = " "
+    var totalValue: Double = 0
 
-    // 1. Base font sizes
-    let baseBodySize: CGFloat  = 35
-    let baseTitleSize: CGFloat = 42
+    // 2a) Compute column widths
+    let m   = max(
+      denominations.map { $0.count }.max() ?? 0,
+      bundleDenoms .map { $0.count }.max() ?? 0
+    )
+    let mct = max(
+      individualDenominationCounts.values.map { String($0).count }.max() ?? 0,
+      bundleDenominationCounts.values .map { String($0).count }.max() ?? 0
+    )
 
-    // 2. Figure out how many lines we’ll draw
-    let sortedDenoms = Array(Set(individualDenominationCounts.keys)
-                              .union(bundleDenominationCounts.keys))
-                          .sorted(by: >)
-    var lineCount = 0
-    for d in sortedDenoms {
-      if individualDenominationCounts[d, default: 0] > 0 { lineCount += 1 }
-      if bundleDenominationCounts[d, default: 0]   > 0 { lineCount += 1 }
-    }
+      for s in denominations {
+        guard let denom = Double(s) else { continue }
+        let key: Double = denom >= 1 ? Double(Int(denom)) : denom
+        guard let count = individualDenominationCounts[key], count > 0 else { continue }
+        let lineTotal = denom * Double(count)
+        totalValue += lineTotal
 
-    // 3. Preliminary fonts (we’ll adjust bodyFont if it overflows)
-    var bodyFont  = UIFont.monospacedDigitSystemFont(ofSize: baseBodySize,  weight: .regular)
-    let titleFont = UIFont.boldSystemFont(ofSize: baseTitleSize)
-    var lineHeight = bodyFont.lineHeight
+        let totalStr = String(format: "%.2f", lineTotal)
+        let countStr = String(count)
 
-    // 4. Compute heights
-    let titleHeight: CGFloat      = (tableTitle?.isEmpty == false)
-                                   ? titleFont.lineHeight + 8
-                                   : 0
-    let separatorHeight: CGFloat  = lineHeight + 4
-    let footerHeight: CGFloat     = lineHeight * 2 + 10
-    // let extraPadding: CGFloat  = 30  // any extra bottom padding you had
-    let extraPadding: CGFloat     = 30
+        let line =
+          " $" + s +
+          String(repeating: space, count: m - s.count + 2) +
+          "x" +
+          String(repeating: space, count: 3) +
+          countStr + space +
+          String(repeating: space, count: 2 + mct - countStr.count) +
+          "=" +
+          String(repeating: space, count: 2) +
+          "$" + totalStr
 
-    // 5. What’s our max content area?
-    //    (total image height is unconstrained, but we want to limit body text to this area)
-    let maxContentArea = CGFloat(1000) // pick some max, or base on paper length
-
-    // 6. If we’d overflow, scale the bodyFont down
-    let neededContentHeight = CGFloat(lineCount) * lineHeight
-    if neededContentHeight > maxContentArea {
-      let scale = maxContentArea / neededContentHeight
-      let newSize = baseBodySize * scale
-      bodyFont   = UIFont.monospacedDigitSystemFont(ofSize: newSize, weight: .regular)
-      lineHeight = bodyFont.lineHeight
-    }
-
-    // 7. Now recompute heights with final lineHeight
-    let contentHeight = CGFloat(lineCount) * lineHeight
-    let totalHeight   = titleHeight + contentHeight + separatorHeight + lineHeight + footerHeight + extraPadding
-      let canvasSize = CGSize(width: width, height: totalHeight)
-
-      // 8. Set up high-res renderer
-      let format = UIGraphicsImageRendererFormat()
-      format.scale = UIScreen.main.scale
-      let renderer = UIGraphicsImageRenderer(size: canvasSize, format: format)
-
-      return renderer.image { ctx in
-          // fill background with the same canvasSize
-          ctx.cgContext.setFillColor(UIColor.white.cgColor)
-          ctx.cgContext.fill(CGRect(origin: .zero, size: canvasSize))
-
-      // attributes
-      let bodyAttrs  = [ NSAttributedString.Key.font: bodyFont,  .foregroundColor: UIColor.black ]
-      let titleAttrs = [ NSAttributedString.Key.font: titleFont, .foregroundColor: UIColor.black ]
-
-      // draw helper with margin-aware centering
-      func draw(_ text: String, at y: CGFloat, centered: Bool = false, attrs: [NSAttributedString.Key:Any]) {
-        let textWidth = NSString(string: text).size(withAttributes: attrs).width
-        let x: CGFloat
-        if centered {
-          let usableWidth = width - 2*margin
-          x = margin + (usableWidth - textWidth)/2
-        } else {
-          x = margin
-        }
-        NSString(string: text).draw(at: CGPoint(x: x, y: y), withAttributes: attrs)
+        receiptLines.append(line)
       }
+
+
+      for s in bundleDenoms {
+        guard let denom = Double(s),
+              let multiplier = bundleValues[denom] else { continue }
+        let key: Double = denom >= 1 ? Double(Int(denom)) : denom
+        guard let count = bundleDenominationCounts[key], count > 0 else { continue }
+        let lineTotal = Double(count) * multiplier
+        totalValue += lineTotal
+
+        let totalStr = String(format: "%.2f", lineTotal)
+        let countStr = String(count)
+          
+        let line =
+          " $" + s +
+          String(repeating: space, count: m - s.count + 2) +
+          "x" +
+          String(repeating: space, count: 2) +
+          "(" + countStr + ")" +
+          String(repeating: space, count: 2 + mct - countStr.count) +
+          "=" +
+          String(repeating: space, count: 2) +
+          "$" + totalStr
+
+        receiptLines.append(line)
+      }
+
+
+    // 2d) Divider + total
+    let longestLine = receiptLines.max(by: { $0.count < $1.count }) ?? ""
+    let prefixLen   = longestLine.split(separator: "=")[0].count
+    let totalStr    = String(format: "%.2f", totalValue)
+
+    receiptLines.append(String(repeating: "-", count: longestLine.count + 2))
+    let totalLine =
+      " Total" +
+      String(repeating: space, count: prefixLen - 6) +
+      "=" +
+      String(repeating: space, count: 2) +
+      "$" + totalStr
+    receiptLines.append(totalLine)
+      receiptLines.append(String(repeating: "-", count: longestLine.count + 2))
+      receiptLines.insert(String(repeating: "-", count: longestLine.count + 2), at: 0)
+    // 2e) Add 2–3 blank lines, then footer
+    receiptLines.append("")
+    receiptLines.append("")
+    receiptLines.append("Employee: \(employeeName)")
+    receiptLines.append("Date: \(currentDate)")
+
+    // 3) Fit-to-width logic for body + footer
+    let margin: CGFloat = 10
+    let maxTextWidth = width - margin * 2
+
+    var fontSize: CGFloat = 30
+    var bodyFont = UIFont(name: "Courier", size: fontSize)!
+    var attrs: [NSAttributedString.Key: Any] = [
+      .font: bodyFont,
+      .kern: 0
+    ]
+
+    while true {
+      let widest = receiptLines
+        .map { NSString(string: $0).size(withAttributes: attrs).width }
+        .max() ?? 0
+      if widest <= maxTextWidth || fontSize <= 8 {
+        break
+      }
+      fontSize -= 1
+      bodyFont = UIFont(name: "Courier", size: fontSize)!
+      attrs[.font] = bodyFont
+    }
+
+    let lineHeight = bodyFont.lineHeight
+
+    // 4) Title attributes
+    let titleFont = UIFont(name: "Courier-Bold", size: fontSize + 4)!
+    let titlePara = NSMutableParagraphStyle()
+    titlePara.alignment = .center
+    let titleAttrs: [NSAttributedString.Key: Any] = [
+      .font: titleFont,
+      .paragraphStyle: titlePara,
+      .foregroundColor: UIColor.black
+    ]
+    let titleHeight = titleFont.lineHeight
+
+    // 5) Compute canvas size
+    let totalHeight = margin
+                     + (tableTitle != nil ? titleHeight + 4 : 0)
+                     + (tableTitle != nil ? titleHeight : 0)
+                     + 4   // extra spacing after title
+                     + lineHeight * CGFloat(receiptLines.count)
+                     + margin
+    let size = CGSize(width: width, height: totalHeight)
+
+    // 6) Render
+    let renderer = UIGraphicsImageRenderer(size: size)
+    return renderer.image { ctx in
+      // white background
+      ctx.cgContext.setFillColor(UIColor.white.cgColor)
+      ctx.cgContext.fill(CGRect(origin: .zero, size: size))
 
       var y = margin
-      // title
-      if let title = tableTitle, !title.isEmpty {
-        draw(title, at: y, centered: true, attrs: titleAttrs)
-        y += titleFont.lineHeight + 8
+
+      // 6a) Draw title (if any)
+      if let title = tableTitle {
+        let rect = CGRect(x: margin,
+                          y: y,
+                          width: width - margin*2,
+                          height: titleHeight)
+        NSString(string: title)
+          .draw(in: rect, withAttributes: titleAttrs)
+          y += titleHeight + lineHeight  // space after title
       }
 
-      // lines
-          func bundleMultiplier(_ d: Double) -> Double {
-              switch d {
-              case 1.00: return 25
-              case 0.25: return 10
-              case 0.10: return 5
-              case 0.05: return 2
-              default:   return 0
-              }
-          }
-          for d in sortedDenoms {
-              // 1) “Normal” denominations
-              if let cnt = individualDenominationCounts[d], cnt > 0 {
-                  let amount = d * Double(cnt)
-                  let line = String(format: "$%.2f x %d = $%.2f", d, cnt, amount)
-                  draw(line, at: y, attrs: bodyAttrs)
-                  y += lineHeight
-              }
+      // 6b) Draw body & footer lines
+      // reuse attrs, adding paragraph style for left alignment
+      let bodyPara = NSMutableParagraphStyle()
+      bodyPara.alignment = .left
+      attrs[.paragraphStyle] = bodyPara
+      attrs[.foregroundColor] = UIColor.black
 
-              // 2) Bundles next
-              if let bcnt = bundleDenominationCounts[d], bcnt > 0 {
-                  let bundleSize = bundleMultiplier(d)    // e.g. 25, 10, 5, 2
-                  let amount     = bundleSize * Double(bcnt)
-                  // note: no “bdl”, count in ()
-                  let line = String(format: "%.2f x (%d) = %.2f", d, bcnt, amount)
-                  draw(line, at: y, attrs: bodyAttrs)
-                  y += lineHeight
-              }
-          }
-
-      // separator
-      y += 4
-      let dashCount = Int((width - 2*margin)/(bodyFont.pointSize * 0.6))
-      draw(String(repeating: "-", count: dashCount), at: y, attrs: bodyAttrs)
-      y += lineHeight + 4
-
-      // total
-      let totalAmt = sortedDenoms.reduce(0) { s,d in
-        s + d*Double(individualDenominationCounts[d,default:0])
-          + bundleMultiplier(d)*Double(bundleDenominationCounts[d,default:0])
+      for line in receiptLines {
+        let rect = CGRect(x: margin,
+                          y: y,
+                          width: width - margin*2,
+                          height: lineHeight)
+        NSString(string: line)
+          .draw(in: rect, withAttributes: attrs)
+        y += lineHeight
       }
-      draw(String(format: "Total     = $%6.2f", totalAmt), at: y, attrs: bodyAttrs)
-
-      // footer
-      y += lineHeight + 10
-      draw("Employee: \(employeeName)", at: y, attrs: bodyAttrs)
-      draw("Date:     \(currentDate)", at: y + lineHeight, attrs: bodyAttrs)
     }
   }
 }

@@ -62,7 +62,7 @@ struct StarPrinterManager {
                     completion("No Bluetooth printer found.")
                     return
                 }
-
+                let fullWidth = Int(receiptImage.size.width)
                 let builder = StarXpandCommand.StarXpandCommandBuilder()
                 _ = builder.addDocument(
                     StarXpandCommand.DocumentBuilder()
@@ -71,7 +71,7 @@ struct StarPrinterManager {
                                 .actionPrintImage(
                                     StarXpandCommand.Printer.ImageParameter(
                                         image: receiptImage,
-                                        width: 406
+                                        width: fullWidth
                                     )
                                 )
                                 .actionCut(.partial)

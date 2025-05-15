@@ -51,7 +51,13 @@ struct ContentView: View {
                     .tabItem {
                         Label("Tax Calculator", systemImage: "percent")
                     }
+
+                DSRScannerView()
+                    .tabItem {
+                        Label("DSR Scanner", systemImage: "doc.text.viewfinder")
+                    }
             }
+
         }
         .environmentObject(userData) // Pass shared data to all views
     }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E907BE892DD5EF1C003E1C69 /* DSRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE882DD5EF1C003E1C69 /* DSRScannerView.swift */; };
+		E907BE8B2DD5EF60003E1C69 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE8A2DD5EF60003E1C69 /* ImagePicker.swift */; };
 		E916C9D32C1C322600875433 /* FrontclosingAPp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D22C1C322600875433 /* FrontclosingAPp.swift */; };
 		E916C9D52C1C322600875433 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D42C1C322600875433 /* ContentView.swift */; };
 		E916C9D72C1C322600875433 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D62C1C322600875433 /* Item.swift */; };
@@ -59,6 +61,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E907BE882DD5EF1C003E1C69 /* DSRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSRScannerView.swift; sourceTree = "<group>"; };
+		E907BE8A2DD5EF60003E1C69 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		E916C9CF2C1C322600875433 /* FrontclosingAPp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontclosingAPp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E916C9D22C1C322600875433 /* FrontclosingAPp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPp.swift; sourceTree = "<group>"; };
 		E916C9D42C1C322600875433 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -147,6 +151,8 @@
 				E916C9D62C1C322600875433 /* Item.swift */,
 				E97C20802D7442D9005FDB0E /* StarPrinterManager.swift */,
 				E96284362DCF56BD00431751 /* ReceiptGenerator.swift */,
+				E907BE882DD5EF1C003E1C69 /* DSRScannerView.swift */,
+				E907BE8A2DD5EF60003E1C69 /* ImagePicker.swift */,
 				E96F240E2DC88B5C003FE15C /* File.txt */,
 				E916C9D82C1C322800875433 /* Assets.xcassets */,
 				E99B90E32C33F0A000465084 /* Launch Screen.storyboard */,
@@ -339,7 +345,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E907BE8B2DD5EF60003E1C69 /* ImagePicker.swift in Sources */,
 				E97C207E2D743C28005FDB0E /* Objectivecheader.h in Sources */,
+				E907BE892DD5EF1C003E1C69 /* DSRScannerView.swift in Sources */,
 				E916C9D52C1C322600875433 /* ContentView.swift in Sources */,
 				E96284372DCF56BD00431751 /* ReceiptGenerator.swift in Sources */,
 				E93D08012C2C37940023ABFC /* CalculatorContentView.swift in Sources */,
