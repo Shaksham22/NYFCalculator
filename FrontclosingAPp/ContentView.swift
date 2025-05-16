@@ -39,22 +39,38 @@ struct ContentView: View {
             TabView {
                 SalesContentView()
                     .tabItem {
-                        Label("Sales Calculator", systemImage: "desktopcomputer")
+                        VStack {
+                            Image(systemName: "desktopcomputer")
+                            Text("Sales")
+                                .multilineTextAlignment(.center)
+                        }
                     }
 
                 CalculatorContentView()
                     .tabItem {
-                        Label("Safe Money Calculator", systemImage: "archivebox")
+                        VStack {
+                            Image(systemName: "archivebox")
+                            Text("General")
+                                .multilineTextAlignment(.center)
+                        }
                     }
 
                 TaxCalculatorContentView()
                     .tabItem {
-                        Label("Tax Calculator", systemImage: "percent")
+                        VStack {
+                            Image(systemName: "percent")
+                            Text("Tax")
+                                .multilineTextAlignment(.center)
+                        }
                     }
 
                 DSRScannerView()
                     .tabItem {
-                        Label("DSR Scanner", systemImage: "doc.text.viewfinder")
+                        VStack {
+                            Image(systemName: "doc.text.viewfinder")
+                            Text("DSR Scanner")
+                                .multilineTextAlignment(.center)
+                        }
                     }
             }
 

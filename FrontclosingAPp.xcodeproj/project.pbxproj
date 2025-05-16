@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		E907BE892DD5EF1C003E1C69 /* DSRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE882DD5EF1C003E1C69 /* DSRScannerView.swift */; };
 		E907BE8B2DD5EF60003E1C69 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE8A2DD5EF60003E1C69 /* ImagePicker.swift */; };
+		E907BE8D2DD5F44F003E1C69 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE8C2DD5F44F003E1C69 /* CustomTabBarView.swift */; };
+		E907BE9B2DD61899003E1C69 /* POSSalesByOrderParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE9A2DD61899003E1C69 /* POSSalesByOrderParser.swift */; };
+		E907BE9D2DD723EA003E1C69 /* DSRMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE9C2DD723EA003E1C69 /* DSRMetrics.swift */; };
+		E907BE9F2DD7261D003E1C69 /* DSRReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BE9E2DD7261D003E1C69 /* DSRReportView.swift */; };
+		E907BEA12DD7262F003E1C69 /* ParsedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E907BEA02DD7262F003E1C69 /* ParsedListView.swift */; };
 		E916C9D32C1C322600875433 /* FrontclosingAPp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D22C1C322600875433 /* FrontclosingAPp.swift */; };
 		E916C9D52C1C322600875433 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D42C1C322600875433 /* ContentView.swift */; };
 		E916C9D72C1C322600875433 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916C9D62C1C322600875433 /* Item.swift */; };
@@ -27,7 +32,6 @@
 		E97C207E2D743C28005FDB0E /* Objectivecheader.h in Sources */ = {isa = PBXBuildFile; fileRef = E97C207D2D7435C5005FDB0E /* Objectivecheader.h */; };
 		E97C20812D7442D9005FDB0E /* StarPrinterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97C20802D7442D9005FDB0E /* StarPrinterManager.swift */; };
 		E99B90E42C33F0A000465084 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E99B90E32C33F0A000465084 /* Launch Screen.storyboard */; };
-		E9C28E732D7404BE00B0A289 /* Contentviewsample.txt in Sources */ = {isa = PBXBuildFile; fileRef = E9C28E722D7404BE00B0A289 /* Contentviewsample.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +67,11 @@
 /* Begin PBXFileReference section */
 		E907BE882DD5EF1C003E1C69 /* DSRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSRScannerView.swift; sourceTree = "<group>"; };
 		E907BE8A2DD5EF60003E1C69 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		E907BE8C2DD5F44F003E1C69 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTabBarView.swift; path = ../CustomTabBarView.swift; sourceTree = "<group>"; };
+		E907BE9A2DD61899003E1C69 /* POSSalesByOrderParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSSalesByOrderParser.swift; sourceTree = "<group>"; };
+		E907BE9C2DD723EA003E1C69 /* DSRMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSRMetrics.swift; sourceTree = "<group>"; };
+		E907BE9E2DD7261D003E1C69 /* DSRReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSRReportView.swift; sourceTree = "<group>"; };
+		E907BEA02DD7262F003E1C69 /* ParsedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedListView.swift; sourceTree = "<group>"; };
 		E916C9CF2C1C322600875433 /* FrontclosingAPp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontclosingAPp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E916C9D22C1C322600875433 /* FrontclosingAPp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontclosingAPp.swift; sourceTree = "<group>"; };
 		E916C9D42C1C322600875433 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -115,6 +124,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E907BEA22DD72D24003E1C69 /* DSR files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "DSR files";
+			sourceTree = "<group>";
+		};
 		E916C9C62C1C322600875433 = {
 			isa = PBXGroup;
 			children = (
@@ -143,9 +159,15 @@
 				E97C207D2D7435C5005FDB0E /* Objectivecheader.h */,
 				E916C9D22C1C322600875433 /* FrontclosingAPp.swift */,
 				E916C9D42C1C322600875433 /* ContentView.swift */,
+				E907BE9A2DD61899003E1C69 /* POSSalesByOrderParser.swift */,
+				E907BE9C2DD723EA003E1C69 /* DSRMetrics.swift */,
+				E907BE9E2DD7261D003E1C69 /* DSRReportView.swift */,
+				E907BE8C2DD5F44F003E1C69 /* CustomTabBarView.swift */,
+				E907BEA02DD7262F003E1C69 /* ParsedListView.swift */,
 				E9C28E722D7404BE00B0A289 /* Contentviewsample.txt */,
 				E93D07FE2C2C37650023ABFC /* SalesContentView.swift */,
 				E93D08002C2C37940023ABFC /* CalculatorContentView.swift */,
+				E907BEA22DD72D24003E1C69 /* DSR files */,
 				E9246C6E2CA60CDE00E80043 /* TaxCalculatorContentView.swift */,
 				E977C8FE2CD5783000A46790 /* DenominationTableView.swift */,
 				E916C9D62C1C322600875433 /* Item.swift */,
@@ -348,15 +370,19 @@
 				E907BE8B2DD5EF60003E1C69 /* ImagePicker.swift in Sources */,
 				E97C207E2D743C28005FDB0E /* Objectivecheader.h in Sources */,
 				E907BE892DD5EF1C003E1C69 /* DSRScannerView.swift in Sources */,
+				E907BE9B2DD61899003E1C69 /* POSSalesByOrderParser.swift in Sources */,
 				E916C9D52C1C322600875433 /* ContentView.swift in Sources */,
 				E96284372DCF56BD00431751 /* ReceiptGenerator.swift in Sources */,
 				E93D08012C2C37940023ABFC /* CalculatorContentView.swift in Sources */,
-				E9C28E732D7404BE00B0A289 /* Contentviewsample.txt in Sources */,
+				E907BE8D2DD5F44F003E1C69 /* CustomTabBarView.swift in Sources */,
 				E916C9D72C1C322600875433 /* Item.swift in Sources */,
 				E916C9D32C1C322600875433 /* FrontclosingAPp.swift in Sources */,
 				E97C20812D7442D9005FDB0E /* StarPrinterManager.swift in Sources */,
 				E93D07FF2C2C37650023ABFC /* SalesContentView.swift in Sources */,
 				E977C8FF2CD5783000A46790 /* DenominationTableView.swift in Sources */,
+				E907BE9D2DD723EA003E1C69 /* DSRMetrics.swift in Sources */,
+				E907BEA12DD7262F003E1C69 /* ParsedListView.swift in Sources */,
+				E907BE9F2DD7261D003E1C69 /* DSRReportView.swift in Sources */,
 				E9246C6F2CA60CDE00E80043 /* TaxCalculatorContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

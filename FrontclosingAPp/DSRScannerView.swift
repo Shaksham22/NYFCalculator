@@ -2,89 +2,198 @@ import SwiftUI
 import Vision
 import UIKit
 
+// MARK: – Model for POS sections
+struct ParsedSection: Identifiable {
+    let id = UUID()
+    let name: String
+    let entries: [(label: String, value: Double)]
+}
+
+// MARK: – Main View
 struct DSRScannerView: View {
-    @State private var showPicker = false
-    @State private var selectedImage: UIImage?
-    @State private var extractedText: [String] = []
+    @State private var showImagePicker = false
+    @State private var pickedImage: UIImage?
+    @State private var isProcessing = false
 
-    var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            VStack {
-                Text("Scan Receipt for DSR")
-                    .font(.title2)
-                    .padding(.top)
+    // Data
+    @State private var rawText: String = ""
+    @State private var parsedSections: [ParsedSection] = []
+    @State private var dsrMetrics: DSRMetrics?
 
-                if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 250)
-                        .cornerRadius(10)
-                        .padding()
-                } else {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 250)
-                        .overlay(Text("No Image Selected").foregroundColor(.gray))
-                        .cornerRadius(10)
-                        .padding()
-                }
+    // UI State
+    @State private var showRaw = false
+    @State private var showPOS = false
+    @State private var showDSR = false
+    @State private var showErrorAlert = false
+    
+    @State private var timeoutTask: DispatchWorkItem?
+    private let ocrTimeout: TimeInterval = 15
 
-                ScrollView {
-                    if !extractedText.isEmpty {
-                        Text(extractedText.joined(separator: "\n"))
-                            .font(.system(.body, design: .monospaced))
-                            .padding()
-                    }
-                }
-
-                Spacer()
-            }
-
-            // 🔽 Gallery Icon Button (bottom right corner)
-            Button(action: {
-                showPicker = true
-            }) {
-                Image(systemName: "photo")
-                    .font(.system(size: 24))
-                    .padding()
-                    .background(Color.white.opacity(0.9))
-                    .clipShape(Circle())
-                    .shadow(radius: 3)
-            }
-            .padding(.trailing, 20)
-            .padding(.bottom, 20)
-        }
-        .sheet(isPresented: $showPicker) {
-            ImagePicker(selectedImage: $selectedImage)
-        }
-        .onChange(of: selectedImage) { newImage in
-            if let image = newImage {
-                extractText(from: image) { lines in
-                    DispatchQueue.main.async {
-                        self.extractedText = lines
-                    }
-                }
-            }
-        }
+    private var canShowDSR: Bool {
+        guard let diff = dsrMetrics?.cashDifference else { return false }
+        return abs(diff) < 1
     }
 
-    func extractText(from image: UIImage, completion: @escaping ([String]) -> Void) {
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+
+                // Preview Image
+                if let img = pickedImage {
+                    Image(uiImage: img)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 250)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .shadow(radius: 3)
+                }
+
+                // Loading
+                if isProcessing {
+                    ProgressView("Reading…")
+                }
+
+                // Select Image Button
+                Button("Select DSR") {
+                    showImagePicker = true
+                }
+                .buttonStyle(.borderedProminent)
+
+                // Action Buttons
+                VStack(spacing: 8) {
+                    Button("Show Raw OCR") { showRaw = true }
+                        .buttonStyle(.bordered)
+                        .disabled(rawText.isEmpty)
+
+                    Button("Show POS Parse") { showPOS = true }
+                        .buttonStyle(.bordered)
+                        .disabled(parsedSections.isEmpty)
+
+                    Button("Show DSR Sheet") { showDSR = true }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(!canShowDSR)
+                }
+            }
+            .padding()
+        }
+
+        // Image Picker
+        .sheet(isPresented: $showImagePicker) {
+            ImagePicker(selectedImage: $pickedImage)
+        }
+
+        // Image Change Trigger
+        .onChange(of: pickedImage) { img in
+            guard let img else { return }
+            isProcessing = true
+            parsedSections = []
+            recognizeText(in: img)
+            timeoutTask?.cancel()
+            timeoutTask = nil
+
+            // Schedule new timeout
+            let task = DispatchWorkItem {
+                // Runs on main thread when the deadline fires
+                isProcessing = false
+                showErrorAlert = true
+                dsrMetrics = nil
+                parsedSections = []
+            }
+            timeoutTask = task
+            DispatchQueue.main.asyncAfter(deadline: .now() + ocrTimeout, execute: task)
+
+        }
+
+        // Sheet Views
+        .sheet(isPresented: $showRaw) {
+            ScrollView { Text(rawText).padding() }
+        }
+        .sheet(isPresented: $showPOS) {
+            ParsedListView(sections: parsedSections)
+        }
+        .sheet(isPresented: $showDSR) {
+            if let m = dsrMetrics {
+                DSRReportView(m: m)
+            }
+        }
+
+        // Error Alert
+        .alert("Unable to generate DSR", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) { }
+        }
+    }
+}
+
+// MARK: – OCR + Parsing + Calculation
+private extension DSRScannerView {
+    func recognizeText(in image: UIImage) {
         guard let cgImage = image.cgImage else { return }
 
-        let request = VNRecognizeTextRequest { request, error in
-            guard let observations = request.results as? [VNRecognizedTextObservation] else {
-                completion([])
+        let request = VNRecognizeTextRequest { req, err in
+            // ── Cancel any pending timeout immediately ─────────────
+            timeoutTask?.cancel()
+            timeoutTask = nil
+
+            // ── Handle Vision error ────────────────────────────────
+            if let error = err {
+                print("Vision error:", error.localizedDescription)
+                DispatchQueue.main.async {
+                    isProcessing = false
+                    showErrorAlert = true   // show error right away
+                }
                 return
             }
 
-            let lines = observations.compactMap { $0.topCandidates(1).first?.string }
-            completion(lines)
+            // ── Success: pull raw OCR text ─────────────────────────
+            let raw = req.results?
+                .compactMap { $0 as? VNRecognizedTextObservation }
+                .flatMap { $0.topCandidates(1) }
+                .map(\.string)
+                .joined(separator: "\n") ?? ""
+
+            rawText = raw
+
+            // ── Parse POS → Sections ───────────────────────────────
+            let result = POSSalesByOrder.parse(raw: raw)
+            let dict   = result.values
+            let order  = result.displayOrder
+
+            let precedence = ["eat in", "take out", "delivery", "end"]
+            let sections: [ParsedSection] = dict.map { key, inner in
+                var pairs: [(String, Double)] = order[key, default: []]
+                    .compactMap { lbl in
+                        guard let v = inner[lbl] else { return nil }
+                        return (lbl, v)
+                    }
+                let extras = inner
+                    .filter { !order[key, default: []].contains($0.key) }
+                    .sorted { $0.key < $1.key }
+                pairs.append(contentsOf: extras.map { ($0.key, $0.value) })
+                return ParsedSection(name: key, entries: pairs)
+            }
+            .sorted {
+                let ia = precedence.firstIndex(of: $0.name) ?? .max
+                let ib = precedence.firstIndex(of: $1.name) ?? .max
+                return ia < ib
+            }
+
+            // ── Calculate DSR metrics ───────────────────────────────
+            dsrMetrics = DSRMetrics.from(parsed: dict)
+
+            // ── Update UI ──────────────────────────────────────────
+            DispatchQueue.main.async {
+                parsedSections = sections
+                isProcessing   = false
+                if !canShowDSR {
+                    showErrorAlert = true
+                }
+            }
         }
 
-        request.recognitionLevel = .accurate
-        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        request.recognitionLevel     = .accurate
+        request.recognitionLanguages = ["en-US"]
 
+        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: .up)
         DispatchQueue.global(qos: .userInitiated).async {
             try? handler.perform([request])
         }
