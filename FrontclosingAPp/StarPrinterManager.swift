@@ -1,68 +1,59 @@
 //
-//  PrintManager.swift
-//  Handles printing of SwiftUI views to Star Micronics TSP100III Bluetooth printer
+//  StarPrinterManager.swift
+//  Generic image printer for Star Micronics TSP100III via StarIO10
 //
 
 import Foundation
-import SwiftUI
 import UIKit
 import StarIO10
 
-/// Manages discovery and printing of a receipt UIImage via StarIO10.
+
 struct StarPrinterManager {
-    static func printReceipt(
-        employeeName: String,
-        currentDate: String,
-        tableTitle: String,
-        individualDenominationCounts: [Double: Int],
-        bundleDenominationCounts: [Double: Int],
+    
+    /// Preferred entry point – enqueue a UIImage for printing.
+    static func queueImage(
+        _ image: UIImage,
         completion: @escaping (String) -> Void
     ) {
-        let image = ReceiptGenerator.generateReceiptImage(
-            employeeName: employeeName,
-            currentDate: currentDate,
-            tableTitle: tableTitle,
-            individualDenominationCounts: individualDenominationCounts,
-            bundleDenominationCounts: bundleDenominationCounts
-        )
-        printImage(receiptImage: image, completion: completion)
+        let job = PrintJob(image: image, completion: completion)
+        Task { await PrinterJobQueue.shared.enqueue(job) }
     }
-
-    private static func printImage(
-        receiptImage: UIImage,
+    
+    /// Print a UIImage immediately (synchronously w.r.t. the printer).
+    /// You usually shouldn’t call this directly; use `queueImage`.
+    static func printImage(
+        _ image: UIImage,
         completion: @escaping (String) -> Void
     ) {
         Task {
             do {
-                let discoveryManager = try StarDeviceDiscoveryManagerFactory
+                // 1. Discover Bluetooth printer
+                let discovery = try StarDeviceDiscoveryManagerFactory
                     .create(interfaceTypes: [.bluetooth])
-                discoveryManager.discoveryTime = 5000
+                discovery.discoveryTime = 5000
                 
-                var foundPrinter: StarPrinter?
+                var found: StarPrinter?
                 let sem = DispatchSemaphore(value: 0)
-
+                
                 class Delegate: NSObject, StarDeviceDiscoveryManagerDelegate {
                     let sem: DispatchSemaphore
-                    var onPrinterFound: ((StarPrinter) -> Void)?
-                    init(_ sem: DispatchSemaphore) { self.sem = sem }
-                    func manager(_ m: StarDeviceDiscoveryManager, didFind p: StarPrinter) {
-                        onPrinterFound?(p)
-                    }
-                    func managerDidFinishDiscovery(_ m: StarDeviceDiscoveryManager) {
-                        sem.signal()
-                    }
+                    var onFound: ((StarPrinter) -> Void)?
+                    init(_ s: DispatchSemaphore) { sem = s }
+                    func manager(_ m: StarDeviceDiscoveryManager, didFind p: StarPrinter) { onFound?(p) }
+                    func managerDidFinishDiscovery(_ m: StarDeviceDiscoveryManager) { sem.signal() }
                 }
                 let delegate = Delegate(sem)
-                delegate.onPrinterFound = { p in foundPrinter = p }
-                discoveryManager.delegate = delegate
-                try discoveryManager.startDiscovery()
+                delegate.onFound = { found = $0 }
+                discovery.delegate = delegate
+                try discovery.startDiscovery()
                 _ = sem.wait(timeout: .now() + 6)
-
-                guard let printer = foundPrinter else {
+                
+                guard let printer = found else {
                     completion("No Bluetooth printer found.")
                     return
                 }
-                let fullWidth = Int(receiptImage.size.width)
+                
+                // 2. Build commands
                 let builder = StarXpandCommand.StarXpandCommandBuilder()
                 _ = builder.addDocument(
                     StarXpandCommand.DocumentBuilder()
@@ -70,60 +61,68 @@ struct StarPrinterManager {
                             StarXpandCommand.PrinterBuilder()
                                 .actionPrintImage(
                                     StarXpandCommand.Printer.ImageParameter(
-                                        image: receiptImage,
-                                        width: fullWidth
+                                        image: image,
+                                        width: Int(image.size.width)
                                     )
                                 )
                                 .actionCut(.partial)
                         )
                 )
-                let commands = builder.getCommands()
-
+                
+                // 3. Send to printer
                 try await printer.open()
-                try await printer.print(command: commands)
+                try await printer.print(command: builder.getCommands())
                 try await printer.close()
-
-                completion("Receipt printed successfully.")
-            } catch let error as StarIO10Error {
-                var message = error.localizedDescription
-
-                switch error {
-                // 1) Bluetooth‐off is signaled as .illegalDeviceState with code .bluetoothUnavailable
-                case .illegalDeviceState(let msg, let code)
-                    where code == .bluetoothUnavailable:
-                    message = "Bluetooth is off or unavailable. Please enable Bluetooth."
-
-                // 2) Communication errors
-                case .communication(let msg, _):
-                    message = "Communication error with printer: \(msg)"
-
-                // 3) No printer found
-                case .notFound(let msg, _):
-                    message = "Printer not found: \(msg)"
-
-                // 4) Printer in unprintable state – capture message and status
-                case .unprintable(let msg, _, let status):
-                    if let status = status {
-                        if status.coverOpen {
-                            message = "Printer cover is open."
-                        } else if status.paperEmpty {
-                            message = "Printer is out of paper."
-                        } else {
-                            message = "Printer cannot print: \(msg)"
-                        }
-                    } else {
-                        message = "Printer cannot print: \(msg)"
-                    }
-
-                // 5) Any other StarIO10Error
-                default:
-                    message = "Printer error: \(error)"
-                }
-
-                completion(message)
+                
+                completion("Print job completed.")
+                
+            } catch let e as StarIO10Error {
+                completion(Self.humanMessage(from: e))
             } catch {
                 completion("Unknown error: \(error.localizedDescription)")
-            }        }
+            }
+        }
+    }
+    
+    // ───────── Optional legacy helper (delete when migrated) ─────────
+    /// Keeps old calls compiling while you move generation into views.
+    static func queueReceipt(
+        employeeName: String,
+        currentDate: String,
+        tableTitle: String,
+        individualDenominationCounts: [Double: Int],
+        bundleDenominationCounts: [Double: Int],
+        completion: @escaping (String) -> Void
+    ) {
+        let img = ReceiptGenerator.generateReceiptImage(
+            employeeName: employeeName,
+            currentDate: currentDate,
+            tableTitle: tableTitle,
+            individualDenominationCounts: individualDenominationCounts,
+            bundleDenominationCounts: bundleDenominationCounts
+        )
+        queueImage(img, completion: completion)
+    }
+    
+    // ─────────────────────────────────────────────────────────────
+    //  Error → human-readable
+    // ─────────────────────────────────────────────────────────────
+    private static func humanMessage(from err: StarIO10Error) -> String {
+        switch err {
+        case .illegalDeviceState(_, let code) where code == .bluetoothUnavailable:
+            return "Bluetooth is off or unavailable. Please enable Bluetooth."
+        case .communication(let msg, _):
+            return "Communication error with printer: \(msg)"
+        case .notFound(let msg, _):
+            return "Printer not found: \(msg)"
+        case .unprintable(let msg, _, let status):
+            if let s = status {
+                if s.coverOpen  { return "Printer cover is open." }
+                if s.paperEmpty { return "Printer is out of paper." }
+            }
+            return "Printer cannot print: \(msg)"
+        default:
+            return "Printer error: \(err)"
+        }
     }
 }
-

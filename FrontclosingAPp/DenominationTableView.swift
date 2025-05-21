@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DenominationTableView: View {
-    @EnvironmentObject var userData: UserData // 🔧 Add this line
+    @EnvironmentObject var userData: UserData
     @State private var alertMessage: String = ""
     @State private var showingAlert: Bool = false
     
@@ -42,33 +42,24 @@ struct DenominationTableView: View {
     }
 
     private func printDenominations() {
-        let employeeName = userData.name.isEmpty ? "Admin" : userData.name // 🔧 Updated
+        let employeeName = userData.name.isEmpty ? "Admin" : userData.name
         let currentDate = getCurrentDate()
 
-        var denominationData: [(Double, Int)] = []
-
-        for denom in sortedDenominations {
-            if let count = individualDenominationCounts[denom], count > 0 {
-                denominationData.append((denom, count))
-            }
-            if let bundleCount = bundleDenominationCounts[denom], bundleCount > 0 {
-                let totalBundleValue = Int(bundleMultiplier(for: denom)) * bundleCount
-                denominationData.append((denom, totalBundleValue))
-            }
-        }
-        print("🖨️ Printing with title: \(tableTitle ?? "nil")")
-
-        StarPrinterManager.printReceipt(
+        // Generate the receipt image here
+        let img = ReceiptGenerator.generateReceiptImage(
             employeeName: employeeName,
             currentDate: currentDate,
             tableTitle: tableTitle ?? "Denomination Summary",
             individualDenominationCounts: individualDenominationCounts,
             bundleDenominationCounts: bundleDenominationCounts
-        ) { result in
-            alertMessage = result
+        )
+
+        // Queue the image for printing
+        StarPrinterManager.queueImage(img) { status in
+            alertMessage = status
             showingAlert = true
         }
-    }
+    } // ←–– Here’s the missing brace to close printDenominations()
 
     private func getCurrentDate() -> String {
         let formatter = DateFormatter()
@@ -81,33 +72,26 @@ struct DenominationTableView: View {
             Text(displayedTitle)
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .multilineTextAlignment(.center)
                 .padding(.bottom, 5)
             
             ForEach(sortedDenominations, id: \.self) { denom in
                 if let count = individualDenominationCounts[denom], count > 0 {
                     HStack {
                         Text("\(denom, specifier: "%.2f") $")
-                            .frame(width: 90, alignment: .leading)
-                            .padding(.leading, 5)
-                        Text(" x ").frame(width: 20)
-                        Text("\(count)").frame(width: 40, alignment: .center)
-                        Text("=").frame(width: 10)
+                        Spacer()
+                        Text("x \(count)")
+                        Spacer()
                         Text(String(format: "%.2f", denom * Double(count)))
-                            .frame(width: 80, alignment: .trailing)
                     }
                 }
 
                 if let bundleCount = bundleDenominationCounts[denom], bundleCount > 0 {
                     HStack {
                         Text("\(denom, specifier: "%.2f") $")
-                            .frame(width: 90, alignment: .leading)
-                            .padding(.leading, 5)
-                        Text(" x ").frame(width: 20)
-                        Text("(\(bundleCount))").frame(width: 40, alignment: .center)
-                        Text("=").frame(width: 10)
+                        Spacer()
+                        Text("x (\(bundleCount))")
+                        Spacer()
                         Text(String(format: "%.2f", bundleMultiplier(for: denom) * Double(bundleCount)))
-                            .frame(width: 80, alignment: .trailing)
                     }
                 }
             }
@@ -120,20 +104,22 @@ struct DenominationTableView: View {
                 Text(String(format: "%.2f", grandTotal)).bold()
             }
 
-            Button(action: { printDenominations() }) {
-                Text("Print")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
+            Button("Print") {
+                printDenominations()
             }
+            .font(.headline)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.blue)
+            .cornerRadius(10)
             .padding(.top, 10)
         }
         .padding()
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Printer Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+        .alert("Printer Status", isPresented: $showingAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(alertMessage)
         }
     }
 }

@@ -1,19 +1,15 @@
-//
-//  SalesContentView.swift
-//  NYF‑Calculator
-//
-//  A single‑file drop‑in that keeps the exact visual style
-//  of your “original” screen (rounded text fields, two main
-//  tables), but layers on the Split / Generate / Revert logic
-//  from your prototype.
-//
-//  It expects a `DenominationTableView` you already have that
-//  takes two dictionaries plus an optional title.
-//
-
 import SwiftUI
+import UIKit   // for dismissKeyboard()
 
 struct SalesContentView: View {
+    // ───── End-Day / Mid-Day toggle ─────
+    private enum CalcMode: String, CaseIterable, Identifiable {
+        case endDay = "End Day"
+        case midDay = "Mid Day"
+        var id: Self { self }
+    }
+    @State private var calcMode: CalcMode = .endDay
+
     // ───────────────────────────── Inputs ─────────────────────────────
     @State private var totalSales: String = ""
     @State private var midDaySales: String = ""
@@ -24,10 +20,10 @@ struct SalesContentView: View {
     ]
 
     // ─────────────────────── Computed / Results ───────────────────────
-    @State private var allocatedX:            [Double: Int] = [:]  // to bank
-    @State private var remainingDenominations:[Double: Int] = [:]  // stays in till
+    @State private var allocatedX:            [Double: Int] = [:]
+    @State private var remainingDenominations:[Double: Int] = [:]
     @State private var endDaySale:            Double        = 0.0
-    @State private var remainingSum:          Double        = 0.0     // $ left in till
+    @State private var remainingSum:          Double        = 0.0
 
     // ───────────────────────── UI State ───────────────────────────────
     @State private var message:     String = ""
@@ -48,7 +44,17 @@ struct SalesContentView: View {
     var body: some View {
         VStack {
             Form {
-                // ── 1. Sales Info ─────────────────────────────────────
+                // ── 0. Mode picker ────────────────────────────────────────
+                Section {
+                    Picker("Mode", selection: $calcMode) {
+                        ForEach(CalcMode.allCases) { mode in
+                            Text(mode.rawValue).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                // ── 1. Sales Info ───────────────────────────────────────
                 Section(header: Text("Sales Information")) {
                     HStack {
                         Text("Total Sales")
@@ -58,21 +64,29 @@ struct SalesContentView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .frame(width: 150)
                     }
-                    HStack {
-                        Text("Mid‑Day Sales")
-                        Spacer()
-                        TextField("Mid‑Day Sales", text: $midDaySales)
-                            .keyboardType(.decimalPad)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .frame(width: 150)
+
+                    // only show Mid-Day in End Day mode
+                    if calcMode == .endDay {
+                        HStack {
+                            Text("Mid-Day Sales")
+                            Spacer()
+                            TextField("Mid-Day Sales", text: $midDaySales)
+                                .keyboardType(.decimalPad)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 150)
+                        }
                     }
+
                     HStack {
                         Text("End Day Sale")
                         Spacer()
-                        TextField("", text: .constant(String(format: "%.2f", endDaySale)))
-                            .disabled(true)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .frame(width: 150)
+                        TextField(
+                            "",
+                            text: .constant(String(format: "%.2f", endDaySale))
+                        )
+                        .disabled(true)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width: 150)
                     }
                 }
 
@@ -80,12 +94,15 @@ struct SalesContentView: View {
                 Section(header: Text("Denominations")) {
                     ForEach(denominations.keys.sorted(by: >), id: \.self) { denom in
                         HStack {
-                            Text("\(denom, specifier: "%.2f") $")
+                            Text(String(format: "%.2f", denom) + " $")
                             Spacer()
-                            TextField("", text: Binding(
-                                get: { self.denominations[denom] ?? "" },
-                                set: { self.denominations[denom] = $0 }
-                            ))
+                            TextField(
+                                "",
+                                text: Binding(
+                                    get: { self.denominations[denom] ?? "" },
+                                    set: { self.denominations[denom] = $0 }
+                                )
+                            )
                             .keyboardType(.numberPad)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .frame(width: 150)
@@ -95,52 +112,51 @@ struct SalesContentView: View {
 
                 // ── 3. Results Section(s) ─────────────────────────────
                 if showResults {
-                    // 3‑a. Money going to bank
+                    // 3-a. Bank deposit table
                     DenominationTableView(
                         individualDenominationCounts: allocatedX,
                         bundleDenominationCounts: [:],
-                        tableTitle: "Bank Deposit Money"
+                        tableTitle: calcMode == .midDay
+                            ? "Mid Day Deposit"
+                            : "Bank Deposit Money"
                     )
 
-                    // 3‑b. Till money (normal or split / generated)
+                    // 3-b. Till money
                     switch splitMode {
                     case .normal:
-                        // single table
                         DenominationTableView(
                             individualDenominationCounts: remainingDenominations,
                             bundleDenominationCounts: [:],
                             tableTitle: "Till Money"
                         )
-
                     case .split100:
                         let (first100, remainder) = computeSplitDistributions()
                         DenominationTableView(
                             individualDenominationCounts: first100,
                             bundleDenominationCounts: [:],
-                            tableTitle: "Till: First $100"
+                            tableTitle: "Till: First $100"
                         )
                         DenominationTableView(
                             individualDenominationCounts: remainder,
                             bundleDenominationCounts: [:],
                             tableTitle: "Till: Remainder"
                         )
-
                     case .generated100:
                         let generated = computeGeneratedDistribution()
                         DenominationTableView(
                             individualDenominationCounts: generated,
                             bundleDenominationCounts: [:],
-                            tableTitle: "Till – Generated to $100"
+                            tableTitle: "Till – Generated to $100"
                         )
                     }
 
-                    // 3‑c. Action button(s)
+                    // 3-c. Action button(s)
                     Group {
                         if splitMode == .normal {
                             if remainingSum > 100 {
-                                Button("Split Till Money")  { splitMode = .split100 }
+                                Button("Split Till Money") { splitMode = .split100 }
                             } else if remainingSum < 100 {
-                                Button("Generate to $100") { splitMode = .generated100 }
+                                Button("Generate to $100") { splitMode = .generated100 }
                             }
                         } else {
                             Button("Revert") { splitMode = .normal }
@@ -150,7 +166,7 @@ struct SalesContentView: View {
                     .padding(.vertical, 4)
                 }
 
-                // 3‑d. Status message
+                // 3-d. Status message
                 if !message.isEmpty {
                     Text(message)
                         .padding()
@@ -168,10 +184,10 @@ struct SalesContentView: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
 
-                Button("Reset")     { reset() }
+                Button("Reset") { reset() }
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.gray.opacity(0.4))
+                    .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
@@ -179,23 +195,28 @@ struct SalesContentView: View {
         }
         .padding()
         .onAppear { endDaySale = calculateEndDaySale() }
+        .onChange(of: calcMode) { newMode in
+            if newMode == .midDay {
+                midDaySales = ""
+            }
+        }
     }
 
     // ─────────────────────── Core Calculation ────────────────────────
     private func calculate() {
-        // 1. end‑of‑day sale
         let total = Double(totalSales) ?? 0
-        let mid   = Double(midDaySales) ?? 0
+        let mid = (calcMode == .endDay)
+            ? Double(midDaySales) ?? 0
+            : 0
         endDaySale = total - mid
 
-        // 2. copy user‑entered counts into integers
-        var avail     = denominations.mapValues { Int($0) ?? 0 }
-        var allocated:[Double: Int] = [:]
+        // … rest of your unchanged logic …
+        var avail = denominations.mapValues { Int($0) ?? 0 }
+        var allocated: [Double:Int] = [:]
         var remaining = endDaySale
 
-        // 3. greedy allocate to bank
         for denom in avail.keys.sorted(by: >) {
-            while avail[denom]! > 0 && remaining >= denom {
+            while avail[denom]! > 0, remaining >= denom {
                 avail[denom]! -= 1
                 allocated[denom, default: 0] += 1
                 remaining -= denom
@@ -203,24 +224,25 @@ struct SalesContentView: View {
             }
         }
 
-        // 4. store results
-        allocatedX            = allocated
+        allocatedX = allocated
         remainingDenominations = avail
-        remainingSum          = avail.reduce(0) { $0 + $1.key * Double($1.value) }
+        remainingSum = avail.reduce(0) { $0 + $1.key * Double($1.value) }
 
-        // 5. status message
         if remaining > 0 {
-            message = "Not enough denominations to allocate $\(String(format: "%.2f", remaining))."
+            message = "Not enough denominations to allocate $" +
+                      String(format: "%.2f", remaining) + "."
         } else {
             if remainingSum == 100 {
                 message = "Till amount is exactly $100."
             } else if remainingSum > 100 {
-                message = "Till amount is more by $\(String(format: "%.2f", remainingSum - 100))."
+                message = "Till amount is more by $" +
+                          String(format: "%.2f", remainingSum - 100) + "."
             } else {
-                message = "Till amount is less by $\(String(format: "%.2f", 100 - remainingSum))."
+                message = "Till amount is less by $" +
+                          String(format: "%.2f", 100 - remainingSum) + "."
             }
             showResults = true
-        }
+        };
         splitMode = .normal
         dismissKeyboard()
     }
@@ -230,7 +252,7 @@ struct SalesContentView: View {
         -> (first100: [Double:Int], remainder: [Double:Int])
     {
         var copy = remainingDenominations
-        var first100:[Double:Int] = [:]
+        var first100: [Double:Int] = [:]
         var sumUsed: Double = 0
 
         for d in copy.keys.sorted(by: >) {
@@ -245,9 +267,8 @@ struct SalesContentView: View {
 
     private func computeGeneratedDistribution() -> [Double:Int] {
         let missing = ((100 - remainingSum) * 100).rounded() / 100
-        let denomList = [100.00, 50.00, 20.00, 10.00, 5.00,
-                          2.00,  1.00,  0.25,  0.10,  0.05]
-        var extra:[Double:Int] = [:]
+        let denomList = [100.00,50.00,20.00,10.00,5.00,2.00,1.00,0.25,0.10,0.05]
+        var extra: [Double:Int] = [:]
         var left = missing
 
         for d in denomList {
@@ -258,9 +279,10 @@ struct SalesContentView: View {
                 left = (left * 100).rounded() / 100
             }
         }
-        // merge extras with what’s already in the till
         var combined = remainingDenominations
-        for (d, c) in extra { combined[d, default: 0] += c }
+        for (d, c) in extra {
+            combined[d, default: 0] += c
+        }
         return combined
     }
 
