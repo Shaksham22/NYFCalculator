@@ -253,10 +253,13 @@ struct CalculatorContentView: View {
             
             DispatchQueue.main.async {
                 self.tableName = inputName?.isEmpty == false ? inputName : nil
-                self.showResults = true
+                
+                // ✅ Delay sheet presentation to ensure tableName is set
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    self.showResults = true
+                }
             }
         }
-
         alert.addAction(continueAction) // ✅ Only "Continue" button
 
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

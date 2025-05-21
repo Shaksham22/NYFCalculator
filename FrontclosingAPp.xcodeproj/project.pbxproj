@@ -124,13 +124,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E907BEA22DD72D24003E1C69 /* DSR files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "DSR files";
-			sourceTree = "<group>";
-		};
 		E916C9C62C1C322600875433 = {
 			isa = PBXGroup;
 			children = (
@@ -167,7 +160,6 @@
 				E9C28E722D7404BE00B0A289 /* Contentviewsample.txt */,
 				E93D07FE2C2C37650023ABFC /* SalesContentView.swift */,
 				E93D08002C2C37940023ABFC /* CalculatorContentView.swift */,
-				E907BEA22DD72D24003E1C69 /* DSR files */,
 				E9246C6E2CA60CDE00E80043 /* TaxCalculatorContentView.swift */,
 				E977C8FE2CD5783000A46790 /* DenominationTableView.swift */,
 				E916C9D62C1C322600875433 /* Item.swift */,

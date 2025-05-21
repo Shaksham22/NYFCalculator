@@ -56,6 +56,7 @@ struct DenominationTableView: View {
                 denominationData.append((denom, totalBundleValue))
             }
         }
+        print("🖨️ Printing with title: \(tableTitle ?? "nil")")
 
         StarPrinterManager.printReceipt(
             employeeName: employeeName,
