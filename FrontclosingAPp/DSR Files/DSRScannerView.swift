@@ -85,6 +85,12 @@ struct DSRScannerView: View {
     @State private var showPOS = false
     @State private var showDSR = false
     @State private var showErrorAlert = false
+    @State private var showCamera = false // for full-screen capture
+    @State private var showCropper  = false
+    @State private var showWeScanCamera    = false
+    @State private var pendingGalleryImage: UIImage?
+    @State private var showWeScanGallery    = false
+    @State private var galleryRawImage: UIImage?
 
     // Timeout
     @State private var timeoutTask: DispatchWorkItem?
@@ -111,9 +117,16 @@ struct DSRScannerView: View {
                 if isProcessing {
                     ProgressView("Reading…")
                 }
-
-                Button("Select DSR") { showImagePicker = true }
+                Button("Select Receipt from Gallery") { showImagePicker = true }
                     .buttonStyle(.borderedProminent)
+
+                // ➋ NEW camera button
+                Button("Take Photo of the Receipt") { showWeScanCamera = true }
+                    .buttonStyle(.borderedProminent)
+                
+//                Button("Edit Crop") { showCropper = true }
+//                    .buttonStyle(.bordered)
+//                    .disabled(pickedImage == nil)
 
                 VStack(spacing: 8) {
                     Button("Show Raw OCR") { showRaw = true }
@@ -127,17 +140,46 @@ struct DSRScannerView: View {
                     Button("Show DSR Sheet") { showDSR = true }
                         .buttonStyle(.borderedProminent)
                         .disabled(!canShowDSR)
+                    Button(role: .destructive) {
+                        resetScanner()
+                    } label: {
+                        Label("Reset Scanner", systemImage: "arrow.counterclockwise")
+                    }
+                    .buttonStyle(.bordered)
                 }
             }
             .padding()
         }
-        .sheet(isPresented: $showImagePicker) {
-            ImagePicker(selectedImage: $pickedImage)
+        .fullScreenCover(isPresented: $showWeScanCamera) {
+            WeScanScanner(source: .camera) { img in pickedImage = img }
+                .ignoresSafeArea()
+                .hideTabBar()
         }
+
+        .fullScreenCover(isPresented: $showWeScanGallery,
+                         onDismiss: { galleryRawImage = nil }) {
+            if let raw = galleryRawImage {
+                WeScanScanner(source: .image(raw)) { img in pickedImage = img }
+                    .ignoresSafeArea()
+                    .hideTabBar()
+            }
+        }
+        .sheet(isPresented: $showImagePicker) {
+            // ImagePicker still uses a binding
+            ImagePicker(selectedImage: $galleryRawImage)
+        }
+        .onChange(of: galleryRawImage) { img in
+            // when user picks photo, open WeScan editor
+            if img != nil { showWeScanGallery = true }
+        }
+
+
+
         .onChange(of: pickedImage) { img in
             guard let img else { return }
-            isProcessing = true
+            isProcessing   = true
             parsedSections = []
+
             recognizeText(in: img)
 
             timeoutTask?.cancel()
@@ -159,6 +201,24 @@ struct DSRScannerView: View {
             Button("OK", role: .cancel) { }
         }
     }
+    // MARK: – Reset helper  ← add this inside DSRScannerView, BEFORE body
+    private func resetScanner() {
+        timeoutTask?.cancel()
+        timeoutTask = nil
+
+        pickedImage      = nil
+        isProcessing     = false
+
+        rawText          = ""
+        parsedSections   = []
+        dsrMetrics       = nil
+
+        showRaw          = false
+        showPOS          = false
+        showDSR          = false
+        showErrorAlert   = false
+    }
+
 }
 
 // MARK: – OCR + Parsing -------------------------------------------------------

@@ -1,5 +1,5 @@
 {
-  "originHash" : "627f6228d9d8e9eb9120438e868842b19156d9c7d5d142eafda1d217a0a49efa",
+  "originHash" : "9135e7ca0d3ebd18fd774202f4247e30902e0d1baaf6dc220506dfb1b626c971",
   "pins" : [
     {
       "identity" : "starxpand-sdk-ios",
@@ -8,6 +8,24 @@
       "state" : {
         "revision" : "0d6faec2c759cedbbdb8ba5c8bfb76f4471b88d9",
         "version" : "2.8.0"
+      }
+    },
+    {
+      "identity" : "tocropviewcontroller",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TimOliver/TOCropViewController",
+      "state" : {
+        "revision" : "a634cb7cdfd580006e79a6e74e64417fe9e9783b",
+        "version" : "2.7.4"
+      }
+    },
+    {
+      "identity" : "wescan",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/WeTransfer/WeScan.git",
+      "state" : {
+        "revision" : "5eee784d8233bc209e8fc38980fd847293c96ebc",
+        "version" : "3.0.0"
       }
     }
   ],

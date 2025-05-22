@@ -4,6 +4,8 @@
 <dict>
     <key>NSBluetoothAlwaysUsageDescription</key>
     <string>Use Bluetooth for communication with the printer.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app needs the camera to scan your DSR receipts.</string>
 	<key>UISupportedExternalAccessoryProtocols</key>
 	<array>
 		<string>jp.star-m.starpro</string>
