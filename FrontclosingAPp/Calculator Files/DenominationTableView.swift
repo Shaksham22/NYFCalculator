@@ -8,6 +8,11 @@ struct DenominationTableView: View {
     let individualDenominationCounts: [Double: Int]
     let bundleDenominationCounts: [Double: Int]
     var tableTitle: String? = nil
+    
+    var  isEndDay: Bool = false                 // default keeps old behaviour
+    var  salesSummary: (total: Double,
+                        midDay: Double,
+                        endDay: Double)? = nil
 
     private var sortedDenominations: [Double] {
         let keys = Set(individualDenominationCounts.keys).union(bundleDenominationCounts.keys)
@@ -42,24 +47,24 @@ struct DenominationTableView: View {
     }
 
     private func printDenominations() {
-        let employeeName = userData.name.isEmpty ? "Admin" : userData.name
-        let currentDate = getCurrentDate()
+            let employeeName = userData.name.isEmpty ? "Admin" : userData.name
+            let currentDate  = getCurrentDate()
 
-        // Generate the receipt image here
-        let img = ReceiptGenerator.generateReceiptImage(
-            employeeName: employeeName,
-            currentDate: currentDate,
-            tableTitle: tableTitle ?? "Denomination Summary",
-            individualDenominationCounts: individualDenominationCounts,
-            bundleDenominationCounts: bundleDenominationCounts
-        )
+            let img = ReceiptGenerator.generateReceiptImage(
+                employeeName: employeeName,
+                currentDate:  currentDate,
+                tableTitle:   tableTitle ?? "Denomination Summary",
+                individualDenominationCounts: individualDenominationCounts,
+                bundleDenominationCounts:     bundleDenominationCounts,
+                isEndDay:      isEndDay,
+                salesSummary:  salesSummary          // ← nil for Mid-Day
+            )
 
-        // Queue the image for printing
-        StarPrinterManager.queueImage(img) { status in
-            alertMessage = status
-            showingAlert = true
-        }
-    } // ←–– Here’s the missing brace to close printDenominations()
+            StarPrinterManager.queueImage(img) { status in
+                alertMessage = status
+                showingAlert = true
+            }
+        }// ←–– Here’s the missing brace to close printDenominations()
 
     private func getCurrentDate() -> String {
         let formatter = DateFormatter()

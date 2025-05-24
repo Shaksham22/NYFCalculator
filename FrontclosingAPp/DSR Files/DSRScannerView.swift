@@ -91,6 +91,7 @@ struct DSRScannerView: View {
     @State private var pendingGalleryImage: UIImage?
     @State private var showWeScanGallery    = false
     @State private var galleryRawImage: UIImage?
+    @State private var showDSRCreatedAlert = false
 
     // Timeout
     @State private var timeoutTask: DispatchWorkItem?
@@ -103,8 +104,9 @@ struct DSRScannerView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-
+            VStack(spacing: 20){
+                
+                // MARK: – Preview & Status
                 if let img = pickedImage {
                     Image(uiImage: img)
                         .resizable()
@@ -113,41 +115,59 @@ struct DSRScannerView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .shadow(radius: 3)
                 }
-
                 if isProcessing {
                     ProgressView("Reading…")
                 }
-                Button("Select Receipt from Gallery") { showImagePicker = true }
-                    .buttonStyle(.borderedProminent)
-
-                // ➋ NEW camera button
-                Button("Take Photo of the Receipt") { showWeScanCamera = true }
-                    .buttonStyle(.borderedProminent)
                 
-//                Button("Edit Crop") { showCropper = true }
-//                    .buttonStyle(.bordered)
-//                    .disabled(pickedImage == nil)
-
-                VStack(spacing: 8) {
-                    Button("Show Raw OCR") { showRaw = true }
-                        .buttonStyle(.bordered)
-                        .disabled(rawText.isEmpty)
-
-                    Button("Show POS Parse") { showPOS = true }
-                        .buttonStyle(.bordered)
-                        .disabled(parsedSections.isEmpty)
-
-                    Button("Show DSR Sheet") { showDSR = true }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(!canShowDSR)
-                    Button(role: .destructive) {
-                        resetScanner()
-                    } label: {
-                        Label("Reset Scanner", systemImage: "arrow.counterclockwise")
+                // MARK: – Input Section
+                GroupBox("Input") {
+                    HStack(spacing: 16) {
+                        Button("Select Receipt from Gallery") { showImagePicker = true }
+                        Button("Take Photo of the Receipt")  { showWeScanCamera = true }
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.borderedProminent)
                 }
-            }
+                
+                // MARK: – Review & Debug Section
+                GroupBox("Action") {
+                    HStack(spacing: 16) {
+                        
+                        Button("Show DSR")  { showDSR = true }
+                            .disabled(!canShowDSR)
+                        Button("Print DSR") {
+                            guard let m = dsrMetrics else { return }
+                            let img = DSRMetrics.makeReceiptImage(from: m)
+                            StarPrinterManager.queueImage(img) { result in
+                                print("Printer:", result)
+                            }
+                        }
+                        .disabled(dsrMetrics == nil)
+                        
+                        Button(role: .destructive) {
+                            resetScanner()
+                        } label: {
+                            Label("Reset", systemImage: "arrow.counterclockwise")
+                        }
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity)
+                }
+                
+                // MARK: – Action Section
+                DisclosureGroup("Debug") {
+                    HStack(spacing: 15) {
+                        Button("Show Raw OCR") { showRaw = true }
+                            .disabled(rawText.isEmpty)
+                            .buttonStyle(.bordered)
+
+                        Button("Show POS Parse") { showPOS = true }
+                            .disabled(parsedSections.isEmpty)
+                            .buttonStyle(.bordered)
+                    }
+                    .padding(.top, 8)
+                }
+                .accentColor(.primary)
             .padding()
         }
         .fullScreenCover(isPresented: $showWeScanCamera) {
@@ -200,6 +220,10 @@ struct DSRScannerView: View {
         .alert("Unable to generate DSR", isPresented: $showErrorAlert) {
             Button("OK", role: .cancel) { }
         }
+        .alert("DSR Report Created", isPresented: $showDSRCreatedAlert) {
+            Button("OK", role: .cancel) { }
+        }
+
     }
     // MARK: – Reset helper  ← add this inside DSRScannerView, BEFORE body
     private func resetScanner() {
@@ -277,9 +301,15 @@ private extension DSRScannerView {
                     return ia < ib
                 }
 
-                self.dsrMetrics  = DSRMetrics.from(parsed: dict)
+                self.dsrMetrics = DSRMetrics.from(parsed: dict)
                 self.isProcessing = false
-                if !canShowDSR { self.showErrorAlert = true }
+
+                if canShowDSR {
+                    // ** Toggle success alert **
+                    self.showDSRCreatedAlert = true
+                } else {
+                    self.showErrorAlert = true
+                    }
             }
         }
 

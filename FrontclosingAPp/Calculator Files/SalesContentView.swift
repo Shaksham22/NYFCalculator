@@ -118,7 +118,13 @@ struct SalesContentView: View {
                         bundleDenominationCounts: [:],
                         tableTitle: calcMode == .midDay
                             ? "Mid Day Deposit"
-                            : "Bank Deposit Money"
+                            : "Bank Deposit Money",
+                        isEndDay: calcMode == .endDay,
+                        salesSummary: calcMode == .endDay
+                            ? (total: Double(totalSales) ?? 0,
+                               midDay: Double(midDaySales) ?? 0,
+                               endDay: endDaySale)
+                            : nil
                     )
 
                     // 3-b. Till money
