@@ -39,6 +39,8 @@
 		E9797C882DCE125B006CEB70 /* StarIO10 in Frameworks */ = {isa = PBXBuildFile; productRef = E9797C872DCE125B006CEB70 /* StarIO10 */; };
 		E97C207E2D743C28005FDB0E /* Objectivecheader.h in Sources */ = {isa = PBXBuildFile; fileRef = E97C207D2D7435C5005FDB0E /* Objectivecheader.h */; };
 		E99B90E42C33F0A000465084 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E99B90E32C33F0A000465084 /* Launch Screen.storyboard */; };
+		E9AA499C2DE5E73500F7282D /* DSRReceiptGenerator.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA499B2DE5E73500F7282D /* DSRReceiptGenerator.swift .swift */; };
+		E9AA49A02DE5F27B00F7282D /* DSRReportImageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AA499F2DE5F27A00F7282D /* DSRReportImageRenderer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,8 @@
 		E97C207D2D7435C5005FDB0E /* Objectivecheader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Objectivecheader.h; sourceTree = "<group>"; };
 		E99B90E32C33F0A000465084 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		E99B90E52C33F52700465084 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E9AA499B2DE5E73500F7282D /* DSRReceiptGenerator.swift .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DSRReceiptGenerator.swift .swift"; sourceTree = "<group>"; };
+		E9AA499F2DE5F27A00F7282D /* DSRReportImageRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSRReportImageRenderer.swift; sourceTree = "<group>"; };
 		E9C28E822D742E8500B0A289 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		E9C28E842D742E8E00B0A289 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -222,7 +226,9 @@
 			isa = PBXGroup;
 			children = (
 				E91F1CA92DDDE0AF0002045F /* PrinterJobQueue.swift */,
+				E9AA499B2DE5E73500F7282D /* DSRReceiptGenerator.swift .swift */,
 				E91F1CAA2DDDE0AF0002045F /* ReceiptGenerator.swift */,
+				E9AA499F2DE5F27A00F7282D /* DSRReportImageRenderer.swift */,
 				E91F1CA82DDDE0AF0002045F /* StarPrinterManager.swift */,
 			);
 			path = "Printer Files";
@@ -407,6 +413,7 @@
 				E97C207E2D743C28005FDB0E /* Objectivecheader.h in Sources */,
 				E91F1C982DDDE09C0002045F /* TaxCalculatorContentView.swift in Sources */,
 				E91F1C992DDDE09C0002045F /* CalculatorContentView.swift in Sources */,
+				E9AA499C2DE5E73500F7282D /* DSRReceiptGenerator.swift .swift in Sources */,
 				E91F1CA22DDDE0A60002045F /* ImagePicker.swift in Sources */,
 				E91F1CBA2DDDFCFE0002045F /* DocumentScannerView.swift in Sources */,
 				E91F1CAC2DDDE0AF0002045F /* PrinterJobQueue.swift in Sources */,
@@ -416,6 +423,7 @@
 				E91F1CAB2DDDE0AF0002045F /* StarPrinterManager.swift in Sources */,
 				E916C9D52C1C322600875433 /* ContentView.swift in Sources */,
 				E91F1CA52DDDE0A60002045F /* DSRReportView.swift in Sources */,
+				E9AA49A02DE5F27B00F7282D /* DSRReportImageRenderer.swift in Sources */,
 				E91F1CA42DDDE0A60002045F /* DSRScannerView.swift in Sources */,
 				E91F1C9A2DDDE09C0002045F /* DenominationTableView.swift in Sources */,
 				E91F1CB82DDDFC180002045F /* AutoCrop.swift in Sources */,

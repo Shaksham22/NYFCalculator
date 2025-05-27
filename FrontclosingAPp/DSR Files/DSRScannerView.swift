@@ -103,6 +103,7 @@ struct DSRScannerView: View {
     }
 
     var body: some View {
+        let buttonWidth: CGFloat = 130
         ScrollView {
             VStack(spacing: 20){
                 
@@ -130,28 +131,50 @@ struct DSRScannerView: View {
                 
                 // MARK: – Review & Debug Section
                 GroupBox("Action") {
-                    HStack(spacing: 16) {
-                        
-                        Button("Show DSR")  { showDSR = true }
-                            .disabled(!canShowDSR)
-                        Button("Print DSR") {
-                            guard let m = dsrMetrics else { return }
-                            let img = DSRMetrics.makeReceiptImage(from: m)
-                            StarPrinterManager.queueImage(img) { result in
-                                print("Printer:", result)
-                            }
-                        }
-                        .disabled(dsrMetrics == nil)
-                        
-                        Button(role: .destructive) {
-                            resetScanner()
-                        } label: {
-                            Label("Reset", systemImage: "arrow.counterclockwise")
+                    VStack{
+                        HStack(spacing: 10) {
+                            
+                            Button("Show DSR")  { showDSR = true }
+                                .disabled(!canShowDSR)
+                                .frame(minWidth: 160)
+                            Button(role: .destructive) {
+                                resetScanner()
+                            } label: {
+                                Label("Reset", systemImage: "arrow.counterclockwise")
+                            }.frame(minWidth: 160)
+
+                            // Somewhere in your button action:
+                        }   .buttonStyle(.borderedProminent)
+                            .frame(maxWidth: .infinity)
+                        HStack(spacing: 10) {
+                            Button("Print DSR Img") {
+                                guard let m = dsrMetrics else { return }
+                                
+                                let img  = DSRReportImageRenderer.makeImage(from: m)
+                                StarPrinterManager.queueImage(img) { result in
+                                    print("Printer:", result)   // optional debug
+                                }
+                            }.disabled(!canShowDSR)
+                                .frame(minWidth: 160)
+                            .disabled(dsrMetrics == nil)
+                            Button("Print DSR Txt") {
+                                guard let m = dsrMetrics else { return }
+                                // 1️⃣ Flatten your metrics into the dictionary form
+                                let flat = m.asDict
+                                // 2️⃣ Call the new generator overload
+                                let img = DSRReceiptGenerator.makeImage(from: flat)
+                                StarPrinterManager.queueImage(img) { result in
+                                    print("Printer:", result)
+                                }
+                            }.disabled(!canShowDSR)
+                                .frame(minWidth: 160)
+                            
+                            
                         }
                     }
+                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
-                .frame(maxWidth: .infinity)
                 }
                 
                 // MARK: – Action Section

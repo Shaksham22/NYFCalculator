@@ -81,8 +81,7 @@ extension DSRMetrics {
         let amex        = add(get("eat in","amex"),        get("take out","amex"))
         let debit       = add(get("eat in","debit"),       get("take out","debit"))
         let bankDep     = add(get("eat in","cash"),        get("take out","cash"))
-
-        let fryPay      = dict["cash"]?["fry society payments"] // TODO key
+        let fryPay     = add(get("eat in","fry society cash/loyalty"),        get("take out","fry society cash/loyalty"))
         let nonCash     = dict["cash"]?["non cash coupons"]     // TODO key
         let givex       = add(get("eat in","givex"),       get("take out","givex"))
 
@@ -122,114 +121,37 @@ extension DSRMetrics {
     }
 }
 
-// ────────────────────────────────────────────────────────────
-// MARK: - Receipt renderer (metrics ➜ UIImage)
-// ────────────────────────────────────────────────────────────
 extension DSRMetrics {
-
-    /// Create a bitmap ready for Star‑TSP100 printing
-    static func makeReceiptImage(from m: DSRMetrics) -> UIImage {
-
-        let lines = m.receiptLines()
-
-        // Printer constants
-        let maxWidth:  CGFloat = 576    // 80‑mm Star default
-        let sidePad:   CGFloat = 14
-        let interLine: CGFloat = 6
-
-        // Choose font size so the longest line fits
-        var fontSize: CGFloat = 28
-        let longest = lines.max(by: { $0.count < $1.count }) ?? ""
-        while fontSize > 10 {
-            let width = (longest as NSString).size(
-                withAttributes: [.font: UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)]
-            ).width
-            if width + sidePad * 2 <= maxWidth { break }
-            fontSize -= 1
-        }
-        let font      = UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
-        let lineH     = font.lineHeight + interLine
-        let totalH    = lineH * CGFloat(lines.count) + 20
-
-        let renderer  = UIGraphicsImageRenderer(
-            size: CGSize(width: maxWidth, height: totalH)
-        )
-        return renderer.image { ctx in
-            UIColor.white.setFill()
-            ctx.fill(CGRect(origin: .zero, size: ctx.format.bounds.size))
-
-            for (i, line) in lines.enumerated() {
-                let y = 10 + CGFloat(i) * lineH
-                (line as NSString).draw(
-                    at: CGPoint(x: sidePad, y: y),
-                    withAttributes: [.font: font, .foregroundColor: UIColor.black]
-                )
-            }
-        }
-    }
-}
-
-// ────────────────────────────────────────────────────────────
-// MARK: - Receipt text builder
-// ────────────────────────────────────────────────────────────
-extension DSRMetrics {
-
-    /// 8‑char money cell: `$ 123.45` right‑aligned, or eight blanks if nil/zero
-    private func money(_ v: Double?) -> String {
-        guard let v, abs(v) > 0.0001 else { return "        " }   // 8 spaces
-        let s   = String(format: "%.2f", v)
-        let pad = max(0, 7 - s.count)                             // one char is "$"
-        return "$" + String(repeating: " ", count: pad) + s
-    }
-
-    /// Convenience to keep rows tidy
-    private func row(_ label: String, _ value: Double?, bold: Bool = false) -> String {
-        let lbl = label.padding(toLength: 30, withPad: " ", startingAt: 0)
-        let val = money(value)
-        return bold ? lbl.uppercased() + val : lbl + val
-    }
-
-    /// All lines in printing order
-    func receiptLines() -> [String] {
-        var out: [String] = []
-
-        out.append("----------- DAILY SALES REPORT -----------")
-        out.append("")
+    /// Flatten into `[String : Double]` for inter-module or dynamic use.
+    /// Nil values are simply omitted (so the consumer can `?? 0` if needed).
+    var asDict: [String: Double] {
+        var d: [String: Double] = [:]
 
         // Section A
-        out.append(row("NET SALES",                netSales))
-        out.append(row("FRY SOCIETY LOADS",        fryLoads))
-        out.append(row("GST & HST",                gstHst))
-        out.append(row("MANITOBA PST",             manitobaPst))
-        out.append(row("TOTAL A",                  totalA, bold: true))
-        out.append("")
+        if let v = netSales        { d["netSales"]        = v }
+        if let v = fryLoads        { d["fryLoads"]        = v }
+        if let v = gstHst          { d["gstHst"]          = v }
+        if let v = manitobaPst     { d["manitobaPst"]     = v }
+        d["totalA"] = totalA ?? 0
 
         // Section B
-        out.append(row("CASH FLOAT INCREASE (DECREASE)", cashFloatDelta))
-        out.append(row("AGGREGATORS",              aggregators))
-        out.append(row("PAYOUTS, GST/HST NOT INCLUDED", payouts))
-        out.append(row("GST/HST ON PAYOUTS",       gstOnPayouts))
-        out.append(row("VISA",                     visa))
-        out.append(row("MASTERCARD",               mastercard))
-        out.append(row("AMERICAN EXPRESS",         amex))
-        out.append(row("DEBIT CARD",               debit))
-        out.append(row("BANK DEPOSIT",             bankDeposit))
-        out.append(row("FRY SOCIETY PAYMENTS",     fryPayments))
-        out.append(row("NON‑CASH COUPONS/REWARDS", nonCash))
-        out.append(row("GIVEX $ +/-",              givex))
-        out.append(row("TOTAL B",                  totalB, bold: true))
-        out.append("")
+        if let v = cashFloatDelta  { d["cashFloatDelta"]  = v }
+        if let v = aggregators     { d["aggregators"]     = v }
+        if let v = payouts         { d["payouts"]         = v }
+        if let v = gstOnPayouts    { d["gstOnPayouts"]    = v }
+        if let v = visa            { d["visa"]            = v }
+        if let v = mastercard      { d["mastercard"]      = v }
+        if let v = amex            { d["amex"]            = v }
+        if let v = debit           { d["debit"]           = v }
+        if let v = bankDeposit     { d["bankDeposit"]     = v }
+        if let v = fryPayments     { d["fryPayments"]     = v }
+        if let v = nonCash         { d["nonCash"]         = v }
+        if let v = givex           { d["givex"]           = v }
+        d["totalB"] = totalB ?? 0
 
-        // Difference
-        out.append(row("CASH DIFFERENCE",          cashDifference, bold: true))
-        out.append("------------------------------------------")
-        out.append("")
+        // Final
+        if let v = cashDifference  { d["cashDifference"]  = v }
 
-        // Footer
-        let date = DateFormatter.localizedString(from: Date(),
-                                                 dateStyle: .medium,
-                                                 timeStyle: .none)
-        out.append("Printed: \(date)")
-        return out
+        return d
     }
 }
