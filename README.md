@@ -12,85 +12,123 @@ I could not publish it on the App Store because I did not have an Apple Develope
 
 ## Sales, Till Money, and Bank Deposit
 
-This was the main workflow I built the app around. During front closing, I entered the total cash sales for the day, any mid-day cash removal, and the denominations present in the cash register.
+During front closing, I entered the total cash sales, any mid-day cash removal, and the denominations present in the cash register.
 
-At my store, **$100 was kept permanently in the till / cash register** as the standard till float. Anything above that amount was treated as bank deposit money.
+At my store, **$100 stayed permanently in the till / cash register** as the standard till float. Anything above that was treated as bank deposit money.
 
-![Sales closing input screen for entering sales values and cash denominations](images/01-sales-closing-input.png)
+<p align="left">
+  <b>Sales closing input</b><br>
+  <img src="images/01-sales-closing-input.png" alt="Sales closing input screen" width="250">
+</p>
 
-The app calculated how much money should remain in the till and how much should go into the bank deposit.
+The app calculated the till money and bank deposit split.
 
-| Till Money                                                                                                             | Bank Deposit                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| ![Till money result showing the cash register amount and whether it is over or short](images/02-till-money-result.png) | ![Bank deposit result showing deposit money and till money breakdown](images/02-bank-deposit-and-till-result.png) |
+<p align="left">
+  <b>Bank deposit result</b><br>
+  <img src="images/02-bank-deposit-and-till-result.png" alt="Bank deposit result" width="250">
+</p>
 
-If the till had less than $100, the app showed how much was missing. If the till had more than $100, it helped split the extra amount from the permanent $100 till float, making the closing report easier to fill accurately.
+<p align="left">
+  <b>Till money result</b><br>
+  <img src="images/02-till-money-result.png" alt="Till money result" width="250">
+</p>
 
-The same information could also be printed as receipt summaries.
+If the till was below $100, it showed the missing amount. If it was above $100, it helped split the extra cash from the permanent till float.
 
-| Printed Till Money                                                                                                 | Printed Bank Deposit                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| ![Printed till money receipt showing the permanent till float breakdown](images/04-printed-till-money-receipt.jpg) | ![Printed bank deposit receipt showing sales details and deposit cash breakdown](images/05-printed-bank-deposit-receipt.jpg) |
+<p align="left">
+  <b>Printed till money receipt</b><br>
+  <img src="images/04-printed-till-money-receipt.jpg" alt="Printed till money receipt" width="250">
+</p>
 
-These values were then copied into the cash float and deposit sheet during closing.
+<p align="left">
+  <b>Printed bank deposit receipt</b><br>
+  <img src="images/05-printed-bank-deposit-receipt.jpg" alt="Printed bank deposit receipt" width="250">
+</p>
 
-![Manual cash float deposit sheet used for writing till and deposit values](images/06-manual-cash-float-deposit-page-2.jpg)
+The final values were copied into the cash float and deposit sheet.
+
+<p align="left">
+  <b>Manual cash float / deposit sheet</b><br>
+  <img src="images/06-manual-cash-float-deposit-page-2.jpg" alt="Manual cash float deposit sheet" width="250">
+</p>
 
 ---
 
 ## General / Multipurpose Cash Calculator
 
-This screen was built as a simple multipurpose cash calculator for miscellaneous closing calculations. I could enter bills, individual coins, and coin bundles to quickly calculate any cash amount needed during closing.
+This was a simple cash calculator for miscellaneous closing calculations. I could enter bills, loose coins, and coin bundles, then print a clean receipt.
 
-For example, some coin rolls came from the bank as bundles, such as a $1 bundle containing 25 coins. The app let me enter both loose coins and bundled coins in the same place.
+<p align="left">
+  <b>General calculator input</b><br>
+  <img src="images/01-general-calculator-input.png" alt="General calculator input screen" width="250">
+</p>
 
-![General calculator input screen with bills, coins, bundles, and total sum](images/01-general-calculator-input.png)
+<p align="left">
+  <b>Denomination summary preview</b><br>
+  <img src="images/02-denomination-summary-preview.png" alt="Denomination summary preview" width="250">
+</p>
 
-After calculating, the app showed a clean denomination summary that could be reviewed before printing.
-
-![Denomination summary preview showing loose coins, bundled coins, and total amount](images/02-denomination-summary-preview.png)
-
-The same summary could be printed as a receipt. I could also use this for different purposes by naming the receipt, such as safe money, deposit money, or any other miscellaneous cash count.
-
-![Printed denomination summary receipt with cash breakdown and total](images/03-printed-denomination-summary.jpg)
+<p align="left">
+  <b>Printed denomination summary</b><br>
+  <img src="images/03-printed-denomination-summary.jpg" alt="Printed denomination summary receipt" width="250">
+</p>
 
 ---
 
 ## DSR Scanner
 
-This was one of the most useful features in the app. Instead of reading the sales receipt manually and filling the Daily Sales Reconciliation sheet by hand, I built a workflow that scanned the receipt, extracted the numbers, and generated the DSR in a cleaner format.
+This was one of the most useful features. Instead of manually reading the POS receipt and filling the Daily Sales Reconciliation sheet, the app scanned the receipt, extracted the numbers, and generated the DSR report.
 
-The flow started from the DSR Scanner screen. From here, I could either select a receipt from the gallery or take a fresh photo.
+<p align="left">
+  <b>DSR scanner start screen</b><br>
+  <img src="images/01-dsr-scanner-start.png" alt="DSR scanner start screen" width="250">
+</p>
 
-![DSR scanner start screen with gallery and camera options](images/01-dsr-scanner-start.png)
+<p align="left">
+  <b>Receipt loaded in scanner</b><br>
+  <img src="images/06-dsr-scanner-receipt-loaded.png" alt="DSR scanner with loaded receipt" width="250">
+</p>
 
-Once a receipt was loaded, the app enabled the DSR actions.
+The receipt could be captured, cropped, reviewed, and converted into a report.
 
-![DSR scanner screen after loading a receipt, showing active action buttons](images/06-dsr-scanner-receipt-loaded.png)
+<p align="left">
+  <b>Camera scan</b><br>
+  <img src="images/03-camera-scan-screen.png" alt="Camera scan screen" width="250">
+</p>
 
-If I used the camera, the app let me capture the receipt directly.
+<p align="left">
+  <b>Edit scan / crop</b><br>
+  <img src="images/02-edit-scan-crop.png" alt="Edit scan crop screen" width="250">
+</p>
 
-![Camera scan screen while capturing the sales receipt](images/03-camera-scan-screen.png)
+<p align="left">
+  <b>Review scanned receipt</b><br>
+  <img src="images/04-review-scanned-receipt.png" alt="Review scanned receipt" width="250">
+</p>
 
-After that, the receipt could be adjusted and cropped, then reviewed before creating the report.
+<p align="left">
+  <b>DSR report created</b><br>
+  <img src="images/05-dsr-report-created.png" alt="DSR report created prompt" width="250">
+</p>
 
-| Edit Scan                                                                           | Review                                                                                     |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| ![Edit scan screen with receipt corners for cropping](images/02-edit-scan-crop.png) | ![Review screen showing the cleaned scanned receipt](images/04-review-scanned-receipt.png) |
+The generated report showed the values in Section A and Section B format.
 
-Once confirmed, the app created the DSR report and unlocked the final outputs.
+<p align="left">
+  <b>Generated DSR Section A</b><br>
+  <img src="images/07-generated-dsr-section-a.png" alt="Generated DSR Section A" width="250">
+</p>
 
-![Prompt confirming that the DSR report has been created](images/05-dsr-report-created.png)
+<p align="left">
+  <b>Generated DSR Section B</b><br>
+  <img src="images/08-generated-dsr-section-b.png" alt="Generated DSR Section B" width="250">
+</p>
 
-The generated DSR could then be viewed in a structured Section A and Section B format.
+These values matched the paper DSR sheet used during closing.
 
-| Generated Section A                                                                             | Generated Section B                                                                                          |
-| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| ![Generated DSR Section A with net sales and tax values](images/07-generated-dsr-section-a.png) | ![Generated DSR Section B with payment breakdown and cash difference](images/08-generated-dsr-section-b.png) |
-
-These values matched the paper DSR sheet that normally had to be filled during closing.
-
-![Manual Daily Sales Reconciliation sheet used at the store](images/09-manual-dsr-sheet.jpg)
+<p align="left">
+  <b>Manual Daily Sales Reconciliation sheet</b><br>
+  <img src="images/09-manual-dsr-sheet.jpg" alt="Manual Daily Sales Reconciliation sheet" width="250">
+</p>
 
 ---
 
